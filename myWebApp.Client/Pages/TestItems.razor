@@ -1,5 +1,6 @@
 ﻿@page "/testitems"
-@rendermode InteractiveAuto
+@* @rendermode InteractiveAuto *@
+@rendermode InteractiveWebAssemblyNoPreRender
 
 @inject HttpClient Http
 @inject NavigationManager navManager
@@ -20,17 +21,20 @@
 </SfGrid>
 
 @code {
-    public List<Item> Items { get; set; }
+
+    static InteractiveWebAssemblyRenderMode InteractiveWebAssemblyNoPreRender = new(false);
+
+    public List<Item> Items { get; set; } = new();
 
     protected override async Task OnInitializedAsync() {
 
-        Items = Enumerable.Range(1, 5).Select(x => new Item() {
+        @* Items = Enumerable.Range(1, 5).Select(x => new Item() {
                 Id = 0 + x,
                 Done = true,
                 Text = (new string[] { "Testo 1", "Testo 2", "Testo 3", "Testo 4", "Testo 5" })[new Random().Next(5)],
-            }).ToList();
+            }).ToList(); *@
 
 
-        //Items = await Http.GetFromJsonAsync<List<Item>>("api/Items") ?? new List<Item>();
+        Items = await Http.GetFromJsonAsync<List<Item>>("api/Items") ?? new List<Item>();
     }
 }

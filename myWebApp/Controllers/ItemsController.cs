@@ -5,101 +5,134 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 
-namespace myWebApp.Controllers {
+namespace myWebApp.Controllers
+{
     [Route("api/[controller]")]
     [ApiController]
-    public class ItemsController : ControllerBase {
+    public class ItemsController : ControllerBase
+    {
         private readonly mySQLDbContext _WebApiDbContext;
 
-        public ItemsController(mySQLDbContext WebApiDbContext) {
+        public ItemsController(mySQLDbContext WebApiDbContext)
+        {
             _WebApiDbContext = WebApiDbContext;
             _WebApiDbContext.Database.SetCommandTimeout(TimeSpan.FromSeconds(180));
         }
 
         // GET: api/Items
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Item>>> GetItems() {
-            if (_WebApiDbContext.Items == null) {
+        public async Task<ActionResult<IEnumerable<Item>>> GetItems()
+        {
+            if (_WebApiDbContext.Items == null)
+            {
                 return NotFound();
             }
             return await _WebApiDbContext.Items.ToListAsync();
         }
 
         // GET: api/Items/5
-        //[HttpGet("{username}")]
-        //public async Task<ActionResult<Item>> GetItem(string username) {
-        //    if (_WebApiDbContext.Items == null) {
-        //        return NotFound();
-        //    }
-        //    try {
-        //        var Item = await _WebApiDbContext.Items.FindAsync(username);
-        //        if (Item == null) {
-        //            return NotFound();
-        //        }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Item>> GetItem(int Id)
+        {
+            if (_WebApiDbContext.Items == null)
+            {
+                return NotFound();
+            }
+            try
+            {
+                var Item = await _WebApiDbContext.Items.FindAsync(Id);
+                if (Item == null)
+                {
+                    return NotFound();
+                }
 
-        //        return Item;
-        //    }
-        //    catch (Exception ex) {
-        //        _ = ex.Message;
-        //        return NotFound();
-        //    }
+                return Item;
+            }
+            catch (Exception ex)
+            {
+                _ = ex.Message;
+                return NotFound();
+            }
 
 
-        //}
+        }
 
-        // POST: api/Items
-        //[HttpPost]
-        //public async Task<ActionResult<Item>> PostItem(Item Item) {
-        //    _WebApiDbContext.Items.Add(Item);
-        //    await _WebApiDbContext.SaveChangesAsync();
+        // POST: api/Items      Add Item
+        [HttpPost]
+        public async Task<ActionResult<Item>> PostItem(Item Item)
+        {
+            if (!ItemExists(Item.Id))
+            {
+                try
+                {
+                    _WebApiDbContext.Items.Add(Item);
+                    await _WebApiDbContext.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    _ = ex.Message;
+                    return BadRequest();
+                }
+            }
 
-        //    return CreatedAtAction(nameof(GetItem), new { username = Item.UserName }, Item);
-        //}
 
-        // PUT: api/Items/5
-        //[HttpPut("{username}")]
-        //public async Task<IActionResult> PutItem(string username, Item Item) {
-        //    if (username != Item.UserName) {
-        //        return BadRequest();
-        //    }
+            return CreatedAtAction(nameof(GetItem), new { Id = Item.Id }, Item);
+        }
 
-        //    _WebApiDbContext.Entry(Item).State = EntityState.Modified;
+        // PUT: api/Items/5     //Update
+        [HttpPut("{Id}")]
+        public async Task<IActionResult> PutItem(int Id, Item Item)
+        {
+            if (Id != Item.Id)
+            {
+                return BadRequest();
+            }
 
-        //    try {
-        //        await _WebApiDbContext.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException) {
-        //        if (!ItemExists(username)) {
-        //            return NotFound();
-        //        }
-        //        else {
-        //            throw;
-        //        }
-        //    }
+            _WebApiDbContext.Entry(Item).State = EntityState.Modified;
 
-        //    return NoContent();
-        //}
+            try
+            {
+                await _WebApiDbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ItemExists(Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
 
         // DELETE: api/Items/5
-        //[HttpDelete("{username}")]
-        //public async Task<IActionResult> DeleteItem(string username) {
-        //    if (_WebApiDbContext.Items == null) {
-        //        return NotFound();
-        //    }
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> DeleteItem(int Id)
+        {
+            if (_WebApiDbContext.Items == null)
+            {
+                return NotFound();
+            }
 
-        //    var Item = await _WebApiDbContext.Items.FindAsync(username);
-        //    if (Item == null) {
-        //        return NotFound();
-        //    }
+            var Item = await _WebApiDbContext.Items.FindAsync(Id);
+            if (Item == null)
+            {
+                return NotFound();
+            }
 
-        //    _WebApiDbContext.Items.Remove(Item);
-        //    await _WebApiDbContext.SaveChangesAsync();
+            _WebApiDbContext.Items.Remove(Item);
+            await _WebApiDbContext.SaveChangesAsync();
 
-        //    return NoContent();
-        //}
+            return NoContent();
+        }
 
-        //private bool ItemExists(string username) {
-        //    return (_WebApiDbContext.Items?.Any(e => e.UserName == username)).GetValueOrDefault();
-        //}
+        private bool ItemExists(int Id)
+        {
+            return (_WebApiDbContext.Items?.Any(i => i.Id == Id)).GetValueOrDefault();
+        }
     }
 }

@@ -1,0 +1,9 @@
+Syncfusion
+
+Ngo9BigBOggjHTQxAR8/V1NAaF1cXmhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnxTdEFjW31WcXBXRWJVVU11Ww==
+
+() Import strutture e dati per Clienti, Clienti Indirizzi, Clienti Documenti, Clienti Contatti
+   Agenti, Condizioni di Pagamento, Zone
+
+() Controller per i dati sopra
+
