@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using myWebApp.Client.Pages;
 using myWebApp.Components;
 using myWebApp.Data;
+using Syncfusion.Blazor;
 
 namespace myWebApp {
     public class Program {
@@ -21,6 +22,7 @@ namespace myWebApp {
 
             builder.Services.AddControllers();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddSyncfusionBlazor();
 
             var app = builder.Build();
 
