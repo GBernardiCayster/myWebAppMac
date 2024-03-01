@@ -1,0 +1,88 @@
+﻿@page "/agenti"
+@rendermode InteractiveWebAssemblyNoPreRender
+
+@inject HttpClient Http
+@inject NavigationManager navManager
+@inject Microsoft.JSInterop.IJSRuntime JS
+
+<PageTitle>Lista Agenti</PageTitle>
+
+<h1>Lista Agenti</h1>
+
+<div class="row">
+    <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+        <SfButton title="Aggiungi" IconCss="fa fa-add" CssClass="e-small e-round mb-2" IsPrimary="true"
+            @onclick="onAddClick"></SfButton>
+    </div>
+
+    <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+        <SfButton title="Modifica" IconCss="fa fa-edit" CssClass="e-small e-round mb-2" IsPrimary="true"
+            @onclick="onEditClick"></SfButton>
+    </div>
+
+    <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+        <SfButton title="Rimuovi" IconCss="fa fa-trash" CssClass="e-small e-round mb-2" IsPrimary="true"
+            @onclick="onRemoveClick"></SfButton>
+    </div>
+
+    <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6 text-end">
+        <SfButton title="Stampa" IconCss="fa fa-print" CssClass="e-small e-round mb-2" IsPrimary="true"
+            @onclick="onPrintClick"></SfButton>
+    </div>
+</div>
+
+<SfGrid DataSource="@Array_Agenti" AllowSorting="true" AllowFiltering="true">
+    <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+    <GridPageSettings PageSize="20"></GridPageSettings>
+    <GridSelectionSettings CheckboxOnly="true" PersistSelection="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple">
+    </GridSelectionSettings>
+    <GridColumns>
+        <GridColumn Type="ColumnType.CheckBox" AllowFiltering="false" AllowSorting="false" Width="60"></GridColumn>
+        <GridColumn Field=@nameof(Agente.RagioneSociale) HeaderText="Ragione Sociale" TextAlign="TextAlign.Left"
+            Width="25%"></GridColumn>
+        <GridColumn Field=@nameof(Agente.Indirizzo) HeaderText="Indirizzo" Width="25%"></GridColumn>
+        <GridColumn Field=@nameof(Agente.CAP) HeaderText="CAP" TextAlign="TextAlign.Left" Width="10%"></GridColumn>
+        <GridColumn Field=@nameof(Agente.Localita) HeaderText="Localita'" Width="25%"></GridColumn>
+        <GridColumn Field=@nameof(Agente.Provincia) HeaderText="Prov." TextAlign="TextAlign.Left" Width="15%">
+        </GridColumn>
+
+    </GridColumns>
+
+</SfGrid>
+
+@code {
+
+    static InteractiveWebAssemblyRenderMode InteractiveWebAssemblyNoPreRender = new(false);
+
+    public List<Agente> Array_Agenti { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        Array_Agenti = await Http.GetFromJsonAsync<List<Agente>>("api/Agenti") ?? new List<Agente>();
+    }
+
+    private void onAddClick(MouseEventArgs args)
+    {
+        _ = "";
+    }
+
+
+    private void onEditClick(MouseEventArgs args)
+    {
+        _ = "";
+    }
+
+
+    private void onRemoveClick(MouseEventArgs args)
+    {
+        _ = "";
+    }
+
+    private void onPrintClick(MouseEventArgs args)
+    {
+        _ = "";
+    }
+
+
+}

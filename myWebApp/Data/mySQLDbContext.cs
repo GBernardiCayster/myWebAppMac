@@ -10,8 +10,7 @@ namespace myWebApp.Data {
         : base(options) {
         }
 
-
-        public DbSet<Item> Items { get; set; } = null!;
+        public DbSet<Agente> Agenti { get; set; } = null!;
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
@@ -23,8 +22,8 @@ namespace myWebApp.Data {
 
 
             #region INDICI
-            modelBuilder.Entity<Item>().HasKey(p => new {
-                p.Id
+            modelBuilder.Entity<Agente>().HasKey(p => new {
+                p.IDAgente
             });
 
             //modelBuilder.Entity<Cliente>().HasKey(p => new {

@@ -23,6 +23,8 @@ namespace myWebApp {
             builder.Services.AddControllers();
             builder.Services.AddSwaggerGen();
             builder.Services.AddSyncfusionBlazor();
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NAaF1cXmhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnxTdEFjW31WcXBXRWJVVU11Ww==");
+
 
             var app = builder.Build();
 

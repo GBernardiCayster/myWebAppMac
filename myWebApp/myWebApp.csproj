@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Syncfusion.Blazor.Navigations" Version="24.2.8" />
     <ProjectReference Include="..\myWebApp.Client\myWebApp.Client.csproj" />
     <ProjectReference Include="..\myWebApp.Shared\myWebApp.Shared.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.1" />

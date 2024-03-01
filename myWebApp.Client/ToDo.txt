@@ -7,3 +7,9 @@ Ngo9BigBOggjHTQxAR8/V1NAaF1cXmhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnxTdEFjW31WcXBXRWJV
 
 () Controller per i dati sopra
 
+() group menu
+() Lista Agenti con Aggiungi / Modifica / Rimuovi / Stampa
+() Edit Agente per Add/Edit
+() report Agenti
+
+
