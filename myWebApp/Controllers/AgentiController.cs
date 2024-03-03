@@ -3,6 +3,9 @@ using myWebApp.Shared.Models;
 using myWebApp.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using BoldReports.Writer;
+using BoldReports.Web;
+using Microsoft.AspNetCore.Diagnostics;
 
 
 namespace myWebApp.Controllers
@@ -11,36 +14,38 @@ namespace myWebApp.Controllers
     [ApiController]
     public class AgentiController : ControllerBase
     {
-        private readonly mySQLDbContext _WebApIDAgentebContext;
+        private readonly mySQLDbContext _WebAppDbContext;
+        private IWebHostEnvironment _hostingEnvironment;
 
-        public AgentiController(mySQLDbContext WebApIDAgentebContext)
+        public AgentiController(mySQLDbContext WebApIDAgentebContext,  IWebHostEnvironment hostingEnvironment)
         {
-            _WebApIDAgentebContext = WebApIDAgentebContext;
-            _WebApIDAgentebContext.Database.SetCommandTimeout(TimeSpan.FromSeconds(180));
+            _WebAppDbContext = WebApIDAgentebContext;
+            _hostingEnvironment = hostingEnvironment;
+            _WebAppDbContext.Database.SetCommandTimeout(TimeSpan.FromSeconds(180));
         }
 
         // GET: api/Agenti
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Agente>>> GetAgenti()
         {
-            if (_WebApIDAgentebContext.Agenti == null)
+            if (_WebAppDbContext.Agenti == null)
             {
                 return NotFound();
             }
-            return await _WebApIDAgentebContext.Agenti.ToListAsync();
+            return await _WebAppDbContext.Agenti.ToListAsync();
         }
 
         // GET: api/Agenti/5
         [HttpGet("{IDAgente}")]
         public async Task<ActionResult<Agente>> GetAgente(int IDAgente)
         {
-            if (_WebApIDAgentebContext.Agenti == null)
+            if (_WebAppDbContext.Agenti == null)
             {
                 return NotFound();
             }
             try
             {
-                var Agente = await _WebApIDAgentebContext.Agenti.FindAsync(IDAgente);
+                var Agente = await _WebAppDbContext.Agenti.FindAsync(IDAgente);
                 if (Agente == null)
                 {
                     return NotFound();
@@ -57,6 +62,78 @@ namespace myWebApp.Controllers
 
         }
 
+
+        [HttpGet("GetListReport/{writerFormat}")]
+        public async Task<String> GetListReport(string writerFormat)
+        {
+
+            //DataSource List of Agenti
+            List<Agente> Agenti = await _WebAppDbContext.Agenti.OrderBy(a => a.RagioneSociale).ToListAsync();
+
+
+            // Here, we have loaded the Agenti report from application the folder wwwroot\Resources.
+            FileStream inputStream = new FileStream(_hostingEnvironment.WebRootPath + @"/Resources/Agenti.rdl", FileMode.Open, FileAccess.Read);
+            MemoryStream reportStream = new MemoryStream();
+            inputStream.CopyTo(reportStream);
+            reportStream.Position = 0;
+            inputStream.Close();
+            ReportWriter writer = new ReportWriter();
+
+            string? fileName = null;
+            WriterFormat format;
+            string? type = null;
+
+            if (writerFormat == "PDF")
+            {
+                fileName = "Clienti.pdf";
+                type = "pdf";
+                format = WriterFormat.PDF;
+            }
+            else if (writerFormat == "Word")
+            {
+                fileName = "Clienti.doc";
+                type = "doc";
+                format = WriterFormat.Word;
+            }
+            else if (writerFormat == "CSV")
+            {
+                fileName = "Clienti.csv";
+                type = "csv";
+                format = WriterFormat.CSV;
+            }
+            else
+            {
+                fileName = "Clienti.xls";
+                type = "xls";
+                format = WriterFormat.Excel;
+            }
+
+            writer.LoadReport(reportStream);
+
+            ReportDataSource ds = new ReportDataSource();
+            ds.Name = "Agenti";
+            ds.Value = Agenti;
+
+            writer.DataSources.Add(ds);
+
+            MemoryStream memoryStream = new MemoryStream();
+            writer.Save(memoryStream, format);
+
+            // Download the generated export document to the client side.
+            memoryStream.Position = 0;
+            FileStreamResult fileStreamResult = new FileStreamResult(memoryStream, "application/" + type);
+            fileStreamResult.FileDownloadName = fileName;
+
+
+            //return fileStreamResult;
+
+            byte[] retValue = memoryStream.ToArray();
+
+            string strValue = Convert.ToBase64String(retValue);
+
+            return strValue;
+        }
+
         // POST: api/Agenti      Add Agente
         [HttpPost]
         public async Task<ActionResult<Agente>> PostAgente(Agente Agente)
@@ -65,8 +142,8 @@ namespace myWebApp.Controllers
             {
                 try
                 {
-                    _WebApIDAgentebContext.Agenti.Add(Agente);
-                    await _WebApIDAgentebContext.SaveChangesAsync();
+                    _WebAppDbContext.Agenti.Add(Agente);
+                    await _WebAppDbContext.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {
@@ -88,11 +165,11 @@ namespace myWebApp.Controllers
                 return BadRequest();
             }
 
-            _WebApIDAgentebContext.Entry(Agente).State = EntityState.Modified;
+            _WebAppDbContext.Entry(Agente).State = EntityState.Modified;
 
             try
             {
-                await _WebApIDAgentebContext.SaveChangesAsync();
+                await _WebAppDbContext.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -113,26 +190,37 @@ namespace myWebApp.Controllers
         [HttpDelete("{IDAgente}")]
         public async Task<IActionResult> DeleteAgente(string IDAgente)
         {
-            if (_WebApIDAgentebContext.Agenti == null)
+            if (_WebAppDbContext.Agenti == null)
             {
                 return NotFound();
             }
 
-            var Agente = await _WebApIDAgentebContext.Agenti.FindAsync(IDAgente);
+            var Agente = await _WebAppDbContext.Agenti.FindAsync(IDAgente);
             if (Agente == null)
             {
                 return NotFound();
             }
 
-            _WebApIDAgentebContext.Agenti.Remove(Agente);
-            await _WebApIDAgentebContext.SaveChangesAsync();
+            try
+            {
+                _WebAppDbContext.Agenti.Remove(Agente);
+                await _WebAppDbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex) {
+                var exceptionHandlerFeature =
+                        HttpContext.Features.Get<IExceptionHandlerFeature>()!;
+
+                return Problem(
+                    detail: exceptionHandlerFeature.Error.StackTrace,
+                    title: exceptionHandlerFeature.Error.Message);
+            }
 
             return NoContent();
         }
 
         private bool AgenteExists(string IDAgente)
         {
-            return (_WebApIDAgentebContext.Agenti?.Any(a => a.IDAgente == IDAgente)).GetValueOrDefault();
+            return (_WebAppDbContext.Agenti?.Any(a => a.IDAgente == IDAgente)).GetValueOrDefault();
         }
     }
 }

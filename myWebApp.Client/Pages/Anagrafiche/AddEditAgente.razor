@@ -1,0 +1,146 @@
+﻿@page "/AddEditAgente/{ParameterID}"
+@rendermode InteractiveWebAssemblyNoPreRender
+
+
+@inject HttpClient Http
+@inject NavigationManager navManager
+@inject Microsoft.JSInterop.IJSRuntime JS
+
+<PageTitle>Anagrafica Agente</PageTitle>
+
+@if (fAddRecord)
+{
+    <h2>
+    Aggiungi nuovo Agente
+</h2>
+}
+else
+{
+    <h2>
+    Modifica dati Agente @SelectedRK.RagioneSociale
+</h2>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <SfTab>
+            <TabAnimationSettings>
+                <TabAnimationPrevious Effect=AnimationEffect.None></TabAnimationPrevious>
+                <TabAnimationNext Effect=AnimationEffect.None></TabAnimationNext>
+            </TabAnimationSettings>
+            <TabItems>
+                <TabItem>
+                    <ChildContent>
+                        <TabHeader Text="Dati Anagrafici"></TabHeader>
+                    </ChildContent>
+                    <ContentTemplate>
+
+                        <SfDataForm  Model="@SelectedRK" ColumnCount=12 ColumnSpacing="10px" OnValidSubmit="onValidSubmit"
+                            ButtonsAlignment="FormButtonsAlignment.Right">
+                            <FormValidator>
+                                <Blazored.FluentValidation.FluentValidationValidator Validator="@fluentValidator"></Blazored.FluentValidation.FluentValidationValidator>
+                            </FormValidator>
+                            <FormItems>
+                                <FormItem Field="@nameof(SelectedRK.RagioneSociale)" LabelText="Ragione Sociale:" ColumnSpan="12"/>
+                                <FormItem Field="@nameof(SelectedRK.Indirizzo)" LabelText="Indirizzo:" ColumnSpan="12" />
+
+                                <FormItem Field="@nameof(SelectedRK.CAP)" LabelText="CAP:" ColumnSpan="3" />
+                                <FormItem Field="@nameof(Agente.Localita)" LabelText="Località:"  ColumnSpan="6"/>
+                                <FormItem Field="@nameof(Agente.Provincia)" LabelText="Prov.:" ColumnSpan="3" />
+
+                                <FormItem Field="@nameof(Agente.PartitaIVA)" LabelText="Partita IVA:" ColumnSpan="6" />
+                                <FormItem Field="@nameof(Agente.CodiceFiscale)" LabelText="Codice Fiscale:" ColumnSpan="6" />
+
+                                <FormItem Field="@nameof(Agente.Telefono)" LabelText="Telefono:" ColumnSpan="6" />
+                                <FormItem Field="@nameof(Agente.EMail)" LabelText="E-Mail:" ColumnSpan="6" />
+
+                            </FormItems>
+                            <FormButtons>
+                                <SfButton>Registra</SfButton>
+                            </FormButtons>
+                        </SfDataForm>
+                    </ContentTemplate>
+                </TabItem>
+            </TabItems>
+        </SfTab>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public string ParameterID { get; set; } = string.Empty;
+    FluentValidator? fluentValidator { get; set; }
+
+
+    static InteractiveWebAssemblyRenderMode InteractiveWebAssemblyNoPreRender = new(false);
+
+    public Agente SelectedRK { get; set; } = new();
+
+    public bool fAddRecord = true;
+    public int ActiveTab = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        string[] array_param = ParameterID.Split("|");
+        if (array_param[0] != "NEW")
+        {
+            //Edit
+
+            //Strip eventuali apici
+            array_param[1] = array_param[1].Replace("'", "");
+
+            SelectedRK = await Http.GetFromJsonAsync<Agente>("api/Agenti/" + array_param[1]) ?? new Agente();
+            fAddRecord = false;
+        }
+        else
+        {
+            //Add
+            SelectedRK = new Agente();
+
+            fAddRecord = true;
+        }
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+
+
+
+    private async void onValidSubmit()
+    {
+        //Add or Update Record
+
+        if (fAddRecord) {
+            //Add RK and ignore response... data is already validate
+            await Http.PostAsJsonAsync<Agente>("api/Agenti",SelectedRK);
+        }
+        else {
+            //Update and ignore response... data is already validate
+            await Http.PutAsJsonAsync<Agente>("api/Agenti/" + SelectedRK.IDAgente,SelectedRK);
+        }
+
+        //Return to list
+        navManager.NavigateTo("Agenti");
+
+    }
+
+
+
+public class FluentValidator : AbstractValidator<Agente>
+    {
+        public FluentValidator()
+        {
+            RuleFor(agente => agente.RagioneSociale).NotEmpty().WithMessage("La ragione sociale non deve essere vuota").MaximumLength(50).WithMessage("La ragione sociale non deve eccedere i 50 caratteri");
+            RuleFor(agente => agente.Indirizzo).MaximumLength(50).WithMessage("L'Indirizzo non deve eccedere i 50 caratteri");
+            RuleFor(agente => agente.CAP).MaximumLength(6).WithMessage("Il CAP non deve eccedere i 6 caratteri");
+            RuleFor(agente => agente.Localita).MaximumLength(50).WithMessage("La localita' non deve eccedere i 50 caratteri");
+            RuleFor(agente => agente.Provincia).MaximumLength(4).WithMessage("La provinca non deve eccedere i 4 caratteri");
+            RuleFor(agente => agente.PartitaIVA).MaximumLength(11).WithMessage("La partita IVA non deve eccedere gli 11 caratteri");
+            RuleFor(agente => agente.CodiceFiscale).MaximumLength(16).WithMessage("Il codice fiscale non deve eccedere i 16 caratteri");
+            RuleFor(agente => agente.Telefono).MaximumLength(30).WithMessage("Il telefono non deve eccedere i 30 caratteri");
+            RuleFor(agente => agente.EMail).MaximumLength(50).WithMessage("La E-Mail non deve eccedere i 50 caratteri");
+        }
+    }
+
+}

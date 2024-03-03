@@ -9,10 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Blazored.FluentValidation" Version="2.1.0" />
+    <PackageReference Include="FluentValidation" Version="11.9.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.1" />
     <PackageReference Include="Syncfusion.Blazor.Buttons" Version="24.2.8" />
+    <PackageReference Include="Syncfusion.Blazor.Calendars" Version="24.2.8" />
+    <PackageReference Include="Syncfusion.Blazor.DataForm" Version="24.2.8" />
+    <PackageReference Include="Syncfusion.Blazor.DropDowns" Version="24.2.8" />
     <PackageReference Include="Syncfusion.Blazor.Grid" Version="24.2.8" />
+    <PackageReference Include="Syncfusion.Blazor.Inputs" Version="24.2.8" />
     <PackageReference Include="Syncfusion.Blazor.Navigations" Version="24.2.8" />
+    <PackageReference Include="Syncfusion.Blazor.Popups" Version="24.2.8" />
+    <PackageReference Include="Syncfusion.Blazor.Spinner" Version="24.2.8" />
     <PackageReference Include="Syncfusion.Blazor.Themes" Version="24.2.8" />
 
   </ItemGroup>
