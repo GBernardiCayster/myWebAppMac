@@ -5,6 +5,9 @@
 @inject NavigationManager navManager
 @inject IJSRuntime JS
 
+@inject AuthenticationStateProvider authenticationStateProvider
+@using myWebApp.Client.Authentication
+
 <PageTitle>Lista Agenti</PageTitle>
 
 @if (Array_Agenti is null)
@@ -118,8 +121,30 @@ else
     protected override async Task OnInitializedAsync()
     {
 
+        await SetHttpTokenAndDb();
+
         Array_Agenti = await Http.GetFromJsonAsync<List<Agente>>("api/Agenti") ?? new List<Agente>();
         await InvokeAsync(StateHasChanged);
+    }
+
+    async Task SetHttpTokenAndDb()
+    {
+        var customAuthStateProvider = (CustomAuthenticationStateProvider)authenticationStateProvider;
+        var token = await customAuthStateProvider.GetToken();
+        var databaseid = await customAuthStateProvider.GetDataBaseId();
+        if (!string.IsNullOrWhiteSpace(token))
+        {
+
+            Http.DefaultRequestHeaders.Clear();
+
+            Http.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", token);
+            Http.DefaultRequestHeaders.Add("dbName", databaseid);
+        
+        }
+        else {
+            navManager.NavigateTo("/login/Agenti");
+        }
+
     }
 
     private void onAddClick(MouseEventArgs args)
@@ -234,6 +259,7 @@ else
 
 
     }
+
 
 
 

@@ -1,0 +1,110 @@
+@page "/login/{ParameterID}"
+
+@rendermode InteractiveWebAssemblyNoPreRender
+
+@using myWebApp.Client.Authentication
+@using myWebApp.Shared
+@using System.Net
+@inject HttpClient httpClient
+@inject IJSRuntime js
+@inject AuthenticationStateProvider authStateProvider
+@inject NavigationManager navManager
+
+<div class="row">
+    <div class="col-lg-4 offset-lg-4 pt-4 pb-4 border">
+        <div class="mb-3 text-center">
+            <h3>LOGIN</h3>
+        </div>
+
+        <div class="row">
+            <div class="col m-3">
+                <SfButton @onclick="SetUserCredentialGiuliano" IsPrimary="true" CssClass="w-100">Giuliano</SfButton>
+            </div>
+            <div class="col m-3">
+                <SfButton @onclick="SetUserCredentialCayster" IsPrimary="true" CssClass="w-100">Cayster</SfButton>
+            </div>
+        </div>
+
+
+        <div class="mb-3">
+            <label>User Name</label>
+            <input @bind="loginRequest.UserName" class="form-control" placeholder="User Name" />
+        </div>
+
+        <div class="mb-3">
+            <label>Password</label>
+            <input @bind="loginRequest.Password" type="password" class="form-control" placeholder="Password" />
+        </div>
+
+        <div class="mb-3 d-grid gap-2">
+            <SfButton @onclick="Authenticate" IsPrimary="true">Login</SfButton>
+        </div>
+
+
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string ParameterID { get; set; } = string.Empty;
+
+    private LoginRequest loginRequest = new LoginRequest();
+
+
+    static InteractiveWebAssemblyRenderMode InteractiveWebAssemblyNoPreRender = new(false);
+
+    protected override async Task OnInitializedAsync()
+    {
+        //Set Default User Name and Password
+        loginRequest.UserName = "";
+        loginRequest.Password = "";
+
+    }
+
+    private async Task SetUserCredentialGiuliano()
+    {
+        //Set Default User Name and Password for Giuliano
+
+        loginRequest.UserName = "gbernardi@cayster.it";
+        loginRequest.Password = "yankee57_PWD";
+
+        await InvokeAsync(StateHasChanged);
+
+    }
+
+    private async Task SetUserCredentialCayster()
+    {
+        //Set Default User Name and Password for Cayster
+
+        loginRequest.UserName = "info@cayster.it";
+        loginRequest.Password = "info_PWD";
+
+        await InvokeAsync(StateHasChanged);
+
+    }
+
+    private async Task Authenticate()
+    {
+        var loginResponse = await httpClient.PostAsJsonAsync<LoginRequest>("/api/Account/Login", loginRequest);
+
+        if (loginResponse.IsSuccessStatusCode)
+        {
+            var userSession = await loginResponse.Content.ReadFromJsonAsync<UserSession>();
+            var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+            await customAuthStateProvider.UpdateAuthenticationState(userSession);
+            if (ParameterID != "")
+            {
+                navManager.NavigateTo(ParameterID, true);
+            }
+            else
+            {
+                navManager.NavigateTo("/", true);
+            }
+        }
+        else if (loginResponse.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            await js.InvokeVoidAsync("alert", "Invalid User Name or Password");
+            return;
+        }
+    }
+}

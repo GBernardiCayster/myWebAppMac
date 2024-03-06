@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="BoldReports.Net.Core" Version="5.4.30" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.2" />
     <PackageReference Include="Syncfusion.Blazor.Navigations" Version="24.2.8" />
     <ProjectReference Include="..\myWebApp.Client\myWebApp.Client.csproj" />
     <ProjectReference Include="..\myWebApp.Shared\myWebApp.Shared.csproj" />
