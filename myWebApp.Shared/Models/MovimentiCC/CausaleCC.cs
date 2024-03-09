@@ -10,9 +10,7 @@ namespace myWebApp.Shared.Models
     public partial class CausaleCC
     {
         [Key]
-        [StringLength(20)]
-        [Column("Codice Causale")]
-        public string Codice { get; set; } = string.Empty;
+        public string IDCausale { get; set; } = Guid.NewGuid().ToString();
 
 
         [Required]
@@ -31,3 +29,5 @@ namespace myWebApp.Shared.Models
 
 
 }
+
+

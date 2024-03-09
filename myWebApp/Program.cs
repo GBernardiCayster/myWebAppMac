@@ -1,10 +1,12 @@
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
-using myWebApp.Client.Authentication;
-using myWebApp.Client.Pages;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
 using myWebApp.Components;
 using myWebApp.Data;
 using Syncfusion.Blazor;
+using myWebApp.Interfaces;
+using myWebApp.Services;
 
 
 namespace myWebApp {
@@ -45,12 +47,33 @@ namespace myWebApp {
                 .AddInteractiveWebAssemblyComponents();
 
             builder.Services.AddControllers();
+
+
+
+            const string JWT_SECURITY_KEY = "yPkCqn4kSWLtaJwXvN2jGzpQRyTZ3gdXkt7FeBJP";
+
             builder.Services.AddSwaggerGen();
             builder.Services.AddSyncfusionBlazor();
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NAaF1cXmhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnxTdEFjW31WcXBXRWJVVU11Ww==");
 
-            //builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
-            //builder.Services.AddAuthorizationCore();
+            builder.Services.AddAuthentication(o =>
+            {
+                o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(o =>
+            {
+                o.RequireHttpsMetadata = false;
+                o.SaveToken = true;
+                o.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.ASCII.GetBytes(JWT_SECURITY_KEY)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+
+            builder.Services.AddTransient<IAgentiManager, AgentiManager>();
 
             var app = builder.Build();
 
@@ -65,9 +88,6 @@ namespace myWebApp {
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
-
-
 
             app.UseHttpsRedirection();
 

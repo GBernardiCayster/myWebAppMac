@@ -5,6 +5,8 @@ using myWebApp.Shared;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
 
+
+//Servizio di Scrittura e lettura in SessionStorage dei dati di un Token JWT ricevuto dal server
 namespace myWebApp.Client.Authentication
 {
     public class CustomAuthenticationStateProvider : AuthenticationStateProvider

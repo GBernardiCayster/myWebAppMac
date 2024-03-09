@@ -66,12 +66,27 @@ else
     </div>
 </div>
 
+<SfDialog Width="30%" Height="20%" IsModal="true" @bind-Visible="ErrorDialogVisibility">
+    <DialogTemplates>
+        <Header> Attenzione </Header>
+        <Content>
+            <div>@strMsgError</div>
+        </Content>
+    </DialogTemplates>
+    <DialogButtons>
+        <DialogButton Content="OK" IsPrimary="true" OnClick="@ErrorDlgOKButtonClick" />
+    </DialogButtons>
+    <DialogAnimationSettings Effect="@DialogEffect.None"></DialogAnimationSettings>
+</SfDialog>
+
 
 @code {
     [Parameter]
     public string ParameterID { get; set; } = string.Empty;
     FluentValidator? fluentValidator { get; set; }
 
+    public bool ErrorDialogVisibility = false;
+    string strMsgError = ""; //Messaggio di errore da presentare all'utente
 
     static InteractiveWebAssemblyRenderMode InteractiveWebAssemblyNoPreRender = new(false);
 
@@ -110,22 +125,54 @@ else
     private async void onValidSubmit()
     {
         //Add or Update Record
+        string strMsgError = "";
 
         if (fAddRecord) {
-            //Add RK and ignore response... data is already validate
-            await Http.PostAsJsonAsync<Agente>("api/Agenti",SelectedRK);
+            //Add RK 
+            try
+            {
+                HttpResponseMessage response = await Http.PostAsJsonAsync<Agente>("api/Agenti", SelectedRK);
+                if (!response.IsSuccessStatusCode) {
+                    strMsgError = "Errore immissione agente: " + SelectedRK.RagioneSociale;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                strMsgError = "Errore immissione agente: " + SelectedRK.RagioneSociale;
+
+            }
         }
         else {
-            //Update and ignore response... data is already validate
-            await Http.PutAsJsonAsync<Agente>("api/Agenti/" + SelectedRK.IDAgente,SelectedRK);
+            //Update
+            try
+            {
+                HttpResponseMessage response = await Http.PutAsJsonAsync<Agente>("api/Agenti/" + SelectedRK.IDAgente, SelectedRK);
+                if (!response.IsSuccessStatusCode) {
+                    strMsgError = "Errore aggiornamento agente: " + SelectedRK.RagioneSociale;
+                }         
+            }
+            catch (Exception ex) {
+                strMsgError = "Errore aggiornamento agente: " + SelectedRK.RagioneSociale;
+            }
         }
 
-        //Return to list
-        navManager.NavigateTo("Agenti");
+        if (strMsgError != "")
+        {
+            //Errori in insert/update ... 
+            ErrorDialogVisibility = true;
+        }
+        else
+        {
+            //Return to list
+            navManager.NavigateTo("Agenti");
+        }
 
     }
 
-
+    private  void ErrorDlgOKButtonClick() {
+        ErrorDialogVisibility = false;
+    }
 
 public class FluentValidator : AbstractValidator<Agente>
     {

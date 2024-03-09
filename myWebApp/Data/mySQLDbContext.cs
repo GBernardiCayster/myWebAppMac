@@ -11,7 +11,8 @@ namespace myWebApp.Data {
         }
 
         public DbSet<Agente> Agenti { get; set; } = null!;
-
+        public DbSet<CausaleCC> CausaliCC { get; set; } = null!;
+        public DbSet<ContoCC> ContiCC { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
 

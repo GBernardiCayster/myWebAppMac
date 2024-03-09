@@ -6,60 +6,139 @@ using Microsoft.EntityFrameworkCore;
 using BoldReports.Writer;
 using BoldReports.Web;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
+using myWebApp.Interfaces;
+using System.Globalization;
+using System.Net.Http.Headers;
 
 
 namespace myWebApp.Controllers
 {
+
+
     [Route("api/[controller]")]
     [ApiController]
     public class AgentiController : ControllerBase
     {
-        private readonly mySQLDbContext _WebAppDbContext;
+        private readonly IAgentiManager AgentiMngr;
         private IWebHostEnvironment _hostingEnvironment;
 
-        public AgentiController(mySQLDbContext WebApIDAgentebContext,  IWebHostEnvironment hostingEnvironment)
+        public AgentiController(IAgentiManager AgentiManager, IWebHostEnvironment hostingEnvironment)
         {
-            _WebAppDbContext = WebApIDAgentebContext;
+            AgentiMngr = AgentiManager;
             _hostingEnvironment = hostingEnvironment;
-            _WebAppDbContext.Database.SetCommandTimeout(TimeSpan.FromSeconds(180));
         }
 
-        // GET: api/Agenti
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Agente>>> GetAgenti()
+        [Authorize(Roles = "Administrator,User")]
+        public async Task<List<Agente>> Get()
         {
-            if (_WebAppDbContext.Agenti == null)
-            {
-                return NotFound();
-            }
-            return await _WebAppDbContext.Agenti.ToListAsync();
+            return await Task.FromResult(AgentiMngr.GetAgenti());
         }
 
-        // GET: api/Agenti/5
-        [HttpGet("{IDAgente}")]
-        public async Task<ActionResult<Agente>> GetAgente(int IDAgente)
+        [HttpGet("{idagente}")]
+        [Authorize(Roles = "Administrator,User")]
+        public IActionResult Get(string idagente)
         {
-            if (_WebAppDbContext.Agenti == null)
+
+            Agente rk = AgentiMngr.GetAgente(idagente);
+            if (rk != null)
             {
-                return NotFound();
+                return Ok(rk);
             }
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Administrator,User")]
+        public IActionResult Post(Agente rk)
+        {
             try
             {
-                var Agente = await _WebAppDbContext.Agenti.FindAsync(IDAgente);
-                if (Agente == null)
+                string rc = AgentiMngr.AddAgente(rk);
+
+                if (rc == "OK")
                 {
-                    return NotFound();
+                    return Ok();
+                }
+                else
+                {
+                    if (rc == "NOTFOUND")
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        return BadRequest();
+                    }
                 }
 
-                return Agente;
             }
             catch (Exception ex)
             {
-                _ = ex.Message;
-                return NotFound();
+                return BadRequest();
             }
+        }
+
+        [HttpPut("{IdAgente}")]
+        [Authorize(Roles = "Administrator,User")]
+        public IActionResult Put(string IdAgente, Agente rk)
+        {
+            try
+            {
+                string rc = AgentiMngr.UpdateAgente(IdAgente, rk);
+
+                if (rc == "OK")
+                {
+                    return Ok();
+                }
+                else
+                {
+                    if (rc == "NOTFOUND")
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        return BadRequest();
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
 
 
+
+
+        [HttpDelete("{IdAgente}")]
+        [Authorize(Roles = "Administrator,User")]
+        public IActionResult Delete(string IdAgente)
+        {
+            try
+            {
+                string rc = AgentiMngr.DeleteAgente(IdAgente);
+
+                if ( rc == "OK")
+                {
+                    return Ok();
+                }
+                else {
+                    if (rc == "NOTFOUND") {
+                        return NotFound();
+                    }
+                    else {
+                        return BadRequest();
+                    }
+                }
+
+            }
+            catch (Exception ex) {
+                return BadRequest();
+            }
         }
 
 
@@ -68,7 +147,7 @@ namespace myWebApp.Controllers
         {
 
             //DataSource List of Agenti
-            List<Agente> Agenti = await _WebAppDbContext.Agenti.OrderBy(a => a.RagioneSociale).ToListAsync();
+            List<Agente> Agenti = await Task.FromResult(AgentiMngr.GetAgenti());
 
 
             // Here, we have loaded the Agenti report from application the folder wwwroot\Resources.
@@ -85,25 +164,25 @@ namespace myWebApp.Controllers
 
             if (writerFormat == "PDF")
             {
-                fileName = "Clienti.pdf";
+                fileName = "Agenti.pdf";
                 type = "pdf";
                 format = WriterFormat.PDF;
             }
             else if (writerFormat == "Word")
             {
-                fileName = "Clienti.doc";
+                fileName = "Agenti.doc";
                 type = "doc";
                 format = WriterFormat.Word;
             }
             else if (writerFormat == "CSV")
             {
-                fileName = "Clienti.csv";
+                fileName = "Agenti.csv";
                 type = "csv";
                 format = WriterFormat.CSV;
             }
             else
             {
-                fileName = "Clienti.xls";
+                fileName = "Agenti.xls";
                 type = "xls";
                 format = WriterFormat.Excel;
             }
@@ -134,93 +213,6 @@ namespace myWebApp.Controllers
             return strValue;
         }
 
-        // POST: api/Agenti      Add Agente
-        [HttpPost]
-        public async Task<ActionResult<Agente>> PostAgente(Agente Agente)
-        {
-            if (!AgenteExists(Agente.IDAgente))
-            {
-                try
-                {
-                    _WebAppDbContext.Agenti.Add(Agente);
-                    await _WebAppDbContext.SaveChangesAsync();
-                }
-                catch (Exception ex)
-                {
-                    _ = ex.Message;
-                    return BadRequest();
-                }
-            }
 
-
-            return CreatedAtAction(nameof(GetAgente), new { IDAgente = Agente.IDAgente }, Agente);
-        }
-
-        // PUT: api/Agenti/5     //Update
-        [HttpPut("{IDAgente}")]
-        public async Task<IActionResult> PutAgente(string IDAgente, Agente Agente)
-        {
-            if (IDAgente != Agente.IDAgente)
-            {
-                return BadRequest();
-            }
-
-            _WebAppDbContext.Entry(Agente).State = EntityState.Modified;
-
-            try
-            {
-                await _WebAppDbContext.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AgenteExists(IDAgente))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // DELETE: api/Agenti/5
-        [HttpDelete("{IDAgente}")]
-        public async Task<IActionResult> DeleteAgente(string IDAgente)
-        {
-            if (_WebAppDbContext.Agenti == null)
-            {
-                return NotFound();
-            }
-
-            var Agente = await _WebAppDbContext.Agenti.FindAsync(IDAgente);
-            if (Agente == null)
-            {
-                return NotFound();
-            }
-
-            try
-            {
-                _WebAppDbContext.Agenti.Remove(Agente);
-                await _WebAppDbContext.SaveChangesAsync();
-            }
-            catch (DbUpdateException ex) {
-                var exceptionHandlerFeature =
-                        HttpContext.Features.Get<IExceptionHandlerFeature>()!;
-
-                return Problem(
-                    detail: exceptionHandlerFeature.Error.StackTrace,
-                    title: exceptionHandlerFeature.Error.Message);
-            }
-
-            return NoContent();
-        }
-
-        private bool AgenteExists(string IDAgente)
-        {
-            return (_WebAppDbContext.Agenti?.Any(a => a.IDAgente == IDAgente)).GetValueOrDefault();
-        }
     }
 }

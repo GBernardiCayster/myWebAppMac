@@ -55,9 +55,28 @@
 
     protected override async Task OnInitializedAsync()
     {
+
+        if (ParameterID == "LOGOUT") {
+            //Try Logout First
+
+            try {
+                await Logout();
+            }
+            catch {
+                ;
+            }
+
+        }
         //Set Default User Name and Password
         loginRequest.UserName = "";
         loginRequest.Password = "";
+
+    }
+
+    private async Task Logout()
+    {
+        var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+        await customAuthStateProvider.UpdateAuthenticationState(null);
 
     }
 
@@ -92,7 +111,7 @@
             var userSession = await loginResponse.Content.ReadFromJsonAsync<UserSession>();
             var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
             await customAuthStateProvider.UpdateAuthenticationState(userSession);
-            if (ParameterID != "")
+            if (ParameterID != "" && ParameterID != "LOGOUT")
             {
                 navManager.NavigateTo(ParameterID, true);
             }

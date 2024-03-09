@@ -32,19 +32,31 @@
         );
 
         TreeDataSource.Add(new
-            TreeItem
+        TreeItem
             {
                 NodeId = "01",
+                NodeText = "Logout/Login",
+                Icon = "fa fa-sign-in",
+                Expanded = true,
+                NavigateUrl = "login/LOGOUT"
+            }
+        );
+
+        TreeDataSource.Add(new
+            TreeItem
+            {
+                NodeId = "02",
                 NodeText = "Anagrafiche",
                 Expanded = false,
                 NavigateUrl = "/",
                 Icon = "fa fa-users",
                 Child = new List<TreeItem>()
                         {
-                            new TreeItem { NodeId = "01-01", NodeText = "Agenti", Icon = "fa fa-user-circle", NavigateUrl="Agenti" },
-                            new TreeItem { NodeId = "01-02", NodeText = "Clienti", Icon = "fa fa-user", NavigateUrl="Clienti" },
-                            new TreeItem { NodeId = "01-08", NodeText = "Cond. Pagamento", Icon = "fa fa-credit-card", NavigateUrl="Pagamenti" },
-                            new TreeItem { NodeId = "01-09", NodeText = "Zone", Icon = "fa fa-map-marker", NavigateUrl="Login" }
+                            new TreeItem { NodeId = "02-01", NodeText = "Agenti", Icon = "fa fa-user-circle", NavigateUrl="Agenti" },
+                            new TreeItem { NodeId = "02-02", NodeText = "Clienti", Icon = "fa fa-user", NavigateUrl="Clienti" },
+new TreeItem { NodeId = "02-07", NodeText = "Conti C/C", Icon = "fa fa-university", NavigateUrl="ContiCC" },
+                            new TreeItem { NodeId = "02-08", NodeText = "Cond. Pagamento", Icon = "fa fa-credit-card", NavigateUrl="Pagamenti" },
+                            new TreeItem { NodeId = "02-09", NodeText = "Zone", Icon = "fa fa-map-marker", NavigateUrl="Login" }
                         }
             }
         );

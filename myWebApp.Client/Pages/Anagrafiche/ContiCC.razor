@@ -1,4 +1,4 @@
-﻿@page "/Agenti"
+﻿@page "/ContiCC"
 @rendermode InteractiveWebAssemblyNoPreRender
 
 @inject HttpClient Http
@@ -8,9 +8,9 @@
 @inject AuthenticationStateProvider authenticationStateProvider
 @using myWebApp.Client.Authentication
 
-<PageTitle>Lista Agenti</PageTitle>
+<PageTitle>Lista Conti Correnti</PageTitle>
 
-@if (Array_Agenti is null)
+@if (Array_ContiCC is null)
 {
     <div class="row">
 
@@ -32,7 +32,7 @@ else
             <b>(@DataBaseId)</b>
         </div>
         <div class="col-10 d-flex justify-content-center ">
-            <h1> Lista Agenti </h1 </div>
+            <h1> Lista Conti Correnti </h1>
         </div>
 
 
@@ -52,13 +52,10 @@ else
                     @onclick="onRemoveClick"></SfButton>
             </div>
 
-            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6 text-end">
-                <SfButton title="Stampa" IconCss="fa fa-print" CssClass="e-small e-round mb-2" IsPrimary="true"
-                    @onclick="onPrintClick"></SfButton>
-            </div>
+
         </div>
 
-        <SfGrid @ref="Grid" DataSource="@Array_Agenti" AllowSorting="true" AllowFiltering="true" AllowPaging="true">
+        <SfGrid @ref="Grid" DataSource="@Array_ContiCC" AllowSorting="true" AllowFiltering="true" AllowPaging="true">
             <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
             <GridPageSettings PageSize="15" PageSizes="true"></GridPageSettings>
             <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"
@@ -67,56 +64,56 @@ else
             <GridColumns>
                 <GridColumn Type="ColumnType.CheckBox" AllowFiltering="false" AllowSorting="false" Width="50">
                 </GridColumn>
-                <GridColumn Field=@nameof(Agente.RagioneSociale) HeaderText="Ragione Sociale" TextAlign="TextAlign.Left"
-                    Width="25%"></GridColumn>
-                <GridColumn Field=@nameof(Agente.Indirizzo) HeaderText="Indirizzo" Width="25%"></GridColumn>
-                <GridColumn Field=@nameof(Agente.CAP) HeaderText="CAP" TextAlign="TextAlign.Left" Width="10%">
+                <GridColumn Field=@nameof(ContoCC.IDContoCC) HeaderText="Codice" TextAlign="TextAlign.Left" Width="30%">
                 </GridColumn>
-                <GridColumn Field=@nameof(Agente.Localita) HeaderText="Localita'" Width="25%"></GridColumn>
-                <GridColumn Field=@nameof(Agente.Provincia) HeaderText="Prov." TextAlign="TextAlign.Left" Width="15%">
+                <GridColumn Field=@nameof(ContoCC.Descrizione) HeaderText="Descrizione" Width="30%"></GridColumn>
+                <GridColumn Field=@nameof(ContoCC.IBAN) HeaderText="IBAN" TextAlign="TextAlign.Left" Width="20%">
+                </GridColumn>
+                <GridColumn  Field=@nameof(ContoCC.Chiuso) HeaderText="Chiuso" TextAlign="TextAlign.Center" Width="10%"></GridColumn>
+                <GridColumn  Field=@nameof(ContoCC.Default) HeaderText="Default" TextAlign="TextAlign.Center" Width="10%">
                 </GridColumn>
 
             </GridColumns>
 
         </SfGrid>
-    </div>
 
-        <div class="spin-row">
-            <SfSpinner Size="80" Label="Stampa in Corso..." Type="SpinnerType.Bootstrap5" Visible="@PrintWaitVisible" />
-        </div>
+    </div>
+</div>
+
+
 }
 
-    <SfDialog Width="30%" Height="20%" IsModal="true" @bind-Visible="RemoveDialogVisibility">
-        <DialogTemplates>
-            <Header> Attenzione </Header>
-            <Content>
-                <p>Confermi la rimozione degli Agenti selezionati?</p>
-            </Content>
-        </DialogTemplates>
-        <DialogButtons>
-            <DialogButton Content="No" IsPrimary="true" OnClick="@RemoveDlgNoButtonClick" />
-            <DialogButton Content="Si" IsPrimary="false" OnClick="@RemoveDlgSiButtonClick" />
+<SfDialog Width="30%" Height="20%" IsModal="true" @bind-Visible="RemoveDialogVisibility">
+    <DialogTemplates>
+        <Header> Attenzione </Header>
+        <Content>
+            <p>Confermi la rimozione dei Conti Correnti selezionati?</p>
+        </Content>
+    </DialogTemplates>
+    <DialogButtons>
+        <DialogButton Content="No" IsPrimary="true" OnClick="@RemoveDlgNoButtonClick" />
+        <DialogButton Content="Si" IsPrimary="false" OnClick="@RemoveDlgSiButtonClick" />
 
-        </DialogButtons>
-        <DialogAnimationSettings Effect="@DialogEffect.None"></DialogAnimationSettings>
-    </SfDialog>
+    </DialogButtons>
+    <DialogAnimationSettings Effect="@DialogEffect.None"></DialogAnimationSettings>
+</SfDialog>
 
-    <SfDialog Width="30%" Height="20%" IsModal="true" @bind-Visible="ErrorDialogVisibility">
-        <DialogTemplates>
-            <Header> Attenzione </Header>
-            <Content>
-                <div>@strMsgError</div>
-            </Content>
-        </DialogTemplates>
-        <DialogButtons>
-            <DialogButton Content="OK" IsPrimary="true" OnClick="@ErrorDlgOKButtonClick" />
-        </DialogButtons>
-        <DialogAnimationSettings Effect="@DialogEffect.None"></DialogAnimationSettings>
-    </SfDialog>
+<SfDialog Width="30%" Height="20%" IsModal="true" @bind-Visible="ErrorDialogVisibility">
+    <DialogTemplates>
+        <Header> Attenzione </Header>
+        <Content>
+            <div>@strMsgError</div>
+        </Content>
+    </DialogTemplates>
+    <DialogButtons>
+        <DialogButton Content="OK" IsPrimary="true" OnClick="@ErrorDlgOKButtonClick" />
+    </DialogButtons>
+    <DialogAnimationSettings Effect="@DialogEffect.None"></DialogAnimationSettings>
+</SfDialog>
 
 @code {
 
-    SfGrid<Agente>? Grid;
+    SfGrid<ContoCC>? Grid;
     public List<int>? SelectedRowIndex { get; set; }
     public bool RemoveDialogVisibility = false;
     public bool ErrorDialogVisibility = false;
@@ -125,7 +122,7 @@ else
 
     public string DataBaseId { get; set; } = string.Empty;
 
-    public List<Agente>? Array_Agenti { get; set; }
+    public List<ContoCC>? Array_ContiCC { get; set; }
 
     string strMsgError = ""; //Messaggio di errore da presentare all'utente
 
@@ -141,12 +138,14 @@ else
             return;
         }
 
-        try {
-            Array_Agenti = await Http.GetFromJsonAsync<List<Agente>>("api/Agenti") ?? new List<Agente>();         
+        try
+        {
+            Array_ContiCC = await Http.GetFromJsonAsync<List<ContoCC>>("api/ContiCC") ?? new List<ContoCC>();
         }
-        catch (Exception ex) {
-            //Eccezione in lettura ... ad esempio per Ruolo utente non abilitato alla lettura  403 Forbidden
-            Array_Agenti = new List<Agente>();
+        catch (Exception ex)
+        {
+            //Eccezione in lettura ... ad esempio per Ruolo utente non abilitato alla lettura 403 Forbidden
+            Array_ContiCC = new List<ContoCC>();
         }
 
         await InvokeAsync(StateHasChanged);
@@ -170,7 +169,7 @@ else
         }
         else
         {
-            navManager.NavigateTo("/login/Agenti");
+            navManager.NavigateTo("/login/ContiCC");
             return false;
         }
 
@@ -181,7 +180,7 @@ else
     private void onAddClick(MouseEventArgs args)
     {
         //Redirect
-        navManager.NavigateTo("AddEditAgente/NEW|XXX");
+        navManager.NavigateTo("AddEditContoCC/NEW|XXX");
 
     }
 
@@ -192,8 +191,8 @@ else
         if (SelectedRowIndex.Count > 0)
         {
             //Edit to First Selected Item
-            Agente RkSelected = Array_Agenti[SelectedRowIndex[0]];
-            navManager.NavigateTo("AddEditAgente/EDIT|" + RkSelected.IDAgente);
+            ContoCC RkSelected = Array_ContiCC[SelectedRowIndex[0]];
+            navManager.NavigateTo("AddEditContoCC/EDIT|" + RkSelected.IDContoCC);
         }
     }
 
@@ -209,28 +208,6 @@ else
         }
     }
 
-    private async void onPrintClick(MouseEventArgs args)
-    {
-        //Call BoldReport Controller for TestReport
-
-        PrintWaitVisible = true;
-        StateHasChanged();
-        string strPDF = await Http.GetStringAsync("/api/Agenti/GetListReport/" + "PDF");
-
-        PrintWaitVisible = false;
-        StateHasChanged();
-
-        try
-        {
-
-            await JS.InvokeAsync<object>("saveAsFile", "Agenti.pdf", strPDF);
-
-        }
-        catch (Exception ex)
-        {
-            _ = ex;
-        }
-    }
 
     private async void RemoveDlgNoButtonClick()
     {
@@ -260,20 +237,20 @@ else
         {
             foreach (int idx in SelectedRowIndex)
             {
-                Agente ag = Array_Agenti[idx];
+                ContoCC rk = Array_ContiCC[idx];
                 try
                 {
-                    var rc = await Http.DeleteFromJsonAsync<Agente>("api/Agenti/" + ag.IDAgente);
+                    var rc = await Http.DeleteFromJsonAsync<ContoCC>("api/ContiCC/" + rk.IDContoCC);
                 }
                 catch (Exception ex)
                 {
                     if (strMsgError == "")
                     {
-                        strMsgError += "Errore rimozione agenti: " + ag.RagioneSociale;
+                        strMsgError += "Errore rimozione Conto C/C: " + rk.Descrizione;
                     }
                     else
                     {
-                        strMsgError += " - " + ag.RagioneSociale;
+                        strMsgError += " - " + rk.Descrizione;
                     }
 
                 }
@@ -281,7 +258,7 @@ else
 
             if (strMsgError != "")
             {
-                //Errori in rimozione Agenti... tipicamemnte violazione di foreign key
+                //Errori in rimozione ContiCC... tipicamemnte violazione di foreign key
                 ErrorDialogVisibility = true;
             }
         }
@@ -295,4 +272,4 @@ else
 
 
 
-    }
+}
