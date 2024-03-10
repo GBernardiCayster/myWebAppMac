@@ -1,0 +1,203 @@
+﻿@page "/AddEditContoCC/{*ParameterID}"
+@rendermode InteractiveWebAssemblyNoPreRender
+
+
+@inject HttpClient Http
+@inject NavigationManager navManager
+@inject Microsoft.JSInterop.IJSRuntime JS
+
+<PageTitle>Anagrafica Conto C/C</PageTitle>
+
+@if (fAddRecord)
+{
+    <div class="row">
+        <div class="col-2">
+            <SfButton title="Back" IconCss="fa fa-arrow-left" CssClass="e-small e-round mb-2" IsPrimary="true"
+                @onclick="onBackPageClick"></SfButton>
+        </div>
+        <div class="col-10 d-flex justify-content-center ">
+            <h2> Aggiungi nuovo Conto C/C</h2>
+        </div>
+    </div>
+
+}
+else
+{
+    <div class="row">
+        <div class="col-2">
+            <SfButton title="Back" IconCss="fa fa-arrow-left" CssClass="e-small e-round mb-2" IsPrimary="true"
+                @onclick="onBackPageClick"></SfButton>
+        </div>
+        <div class="col-10 d-flex justify-content-center ">
+            <h2> Modifica dati Conto C/C @SelectedRK.Descrizione</h2>
+        </div>
+    </div>
+
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <SfTab>
+            <TabAnimationSettings>
+                <TabAnimationPrevious Effect=AnimationEffect.None></TabAnimationPrevious>
+                <TabAnimationNext Effect=AnimationEffect.None></TabAnimationNext>
+            </TabAnimationSettings>
+            <TabItems>
+                <TabItem>
+                    <ChildContent>
+                        <TabHeader Text="Dati Anagrafici"></TabHeader>
+                    </ChildContent>
+                    <ContentTemplate>
+
+                        <SfDataForm  Model="@SelectedRK" ColumnCount=12 ColumnSpacing="10px" OnValidSubmit="onValidSubmit"
+                            ButtonsAlignment="FormButtonsAlignment.Right">
+                            <FormValidator>
+                                <Blazored.FluentValidation.FluentValidationValidator Validator="@fluentValidator"></Blazored.FluentValidation.FluentValidationValidator>
+                            </FormValidator>
+                            <FormItems>
+                                <FormItem Field="@nameof(SelectedRK.IDContoCC)" LabelText="Codice:" ColumnSpan="12"/>
+                                <FormItem Field="@nameof(SelectedRK.Descrizione)" LabelText="Descrizione:" ColumnSpan="12" />
+
+                                <FormItem Field="@nameof(SelectedRK.IBAN)" LabelText="IBAN:" ColumnSpan="12" />
+
+
+                                <FormItem EditorType="FormEditorType.Switch" Field="@nameof(ContoCC.fDefault)" LabelText="Default:"  ColumnSpan="6"/>
+                                <FormItem EditorType="FormEditorType.Switch" Field="@nameof(ContoCC.fChiuso)" LabelText="Chiuso:" ColumnSpan="6" />
+
+
+
+                            </FormItems>
+                            <FormButtons>
+                                <SfButton>Registra</SfButton>
+                            </FormButtons>
+                        </SfDataForm>
+                    </ContentTemplate>
+                </TabItem>
+            </TabItems>
+        </SfTab>
+    </div>
+</div>
+
+<SfDialog Width="30%" Height="20%" IsModal="true" @bind-Visible="ErrorDialogVisibility">
+    <DialogTemplates>
+        <Header> Attenzione </Header>
+        <Content>
+            <div>@strMsgError</div>
+        </Content>
+    </DialogTemplates>
+    <DialogButtons>
+        <DialogButton Content="OK" IsPrimary="true" OnClick="@ErrorDlgOKButtonClick" />
+    </DialogButtons>
+    <DialogAnimationSettings Effect="@DialogEffect.None"></DialogAnimationSettings>
+</SfDialog>
+
+
+@code {
+    [Parameter]
+    public string ParameterID { get; set; } = string.Empty;
+    FluentValidator? fluentValidator { get; set; }
+
+    public bool ErrorDialogVisibility = false;
+    string strMsgError = ""; //Messaggio di errore da presentare all'utente
+
+    static InteractiveWebAssemblyRenderMode InteractiveWebAssemblyNoPreRender = new(false);
+
+    public ContoCC SelectedRK { get; set; } = new();
+
+    public bool fAddRecord = true;
+    public int ActiveTab = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        string[] array_param = ParameterID.Split("|");
+        if (array_param[0] != "NEW")
+        {
+            //Edit
+
+            //Strip eventuali apici
+            array_param[1] = array_param[1].Replace("'", "");
+
+            SelectedRK = await Http.GetFromJsonAsync<ContoCC>("api/ContiCC/" + array_param[1]) ?? new ContoCC();
+            fAddRecord = false;
+        }
+        else
+        {
+            //Add
+            SelectedRK = new ContoCC();
+
+            fAddRecord = true;
+        }
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+
+    private void onBackPageClick(MouseEventArgs args) {
+        //Redirect to Previous Page
+        navManager.NavigateTo("ContiCC");
+    }
+
+    private async void onValidSubmit()
+    {
+        //Add or Update Record
+        string strMsgError = "";
+
+        if (fAddRecord) {
+            //Add RK 
+            try
+            {
+                HttpResponseMessage response = await Http.PostAsJsonAsync<ContoCC>("api/ContiCC", SelectedRK);
+                if (!response.IsSuccessStatusCode) {
+                    strMsgError = "Errore immissione Conto C/C: " + SelectedRK.Descrizione;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                strMsgError = "Errore immissione Conto C/C: " + SelectedRK.Descrizione;
+
+            }
+        }
+        else {
+            //Update
+            try
+            {
+                HttpResponseMessage response = await Http.PutAsJsonAsync<ContoCC>("api/ContiCC/" + SelectedRK.IDContoCC, SelectedRK);
+                if (!response.IsSuccessStatusCode) {
+                    strMsgError = "Errore aggiornamento Conto C/C: " + SelectedRK.Descrizione;
+                }         
+            }
+            catch (Exception ex) {
+                strMsgError = "Errore aggiornamento Conto C/C: " + SelectedRK.Descrizione;
+            }
+        }
+
+        if (strMsgError != "")
+        {
+            //Errori in insert/update ... 
+            ErrorDialogVisibility = true;
+        }
+        else
+        {
+            //Return to list
+            navManager.NavigateTo("ContiCC");
+        }
+
+    }
+
+    private  void ErrorDlgOKButtonClick() {
+        ErrorDialogVisibility = false;
+    }
+
+public class FluentValidator : AbstractValidator<ContoCC>
+    {
+        public FluentValidator()
+        {
+            RuleFor(ContoCC => ContoCC.IDContoCC).NotEmpty().WithMessage("Il Codice Conto C/C non deve essere vuoto").MaximumLength(36).WithMessage("Il Codice C/C non deve eccedere i 36 caratteri");
+            RuleFor(ContoCC => ContoCC.Descrizione).NotEmpty().WithMessage("La Descrizione non deve essere vuota").MaximumLength(50).WithMessage("La Descrizione non deve eccedere i 50 caratteri");
+            RuleFor(ContoCC => ContoCC.IBAN).MaximumLength(50).WithMessage("l'IBAN non deve eccedere i 50 caratteri");
+
+        }
+    }
+
+}

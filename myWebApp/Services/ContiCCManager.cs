@@ -8,36 +8,36 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace myWebApp.Services
 {
-    public class AgentiManager : IAgentiManager
+    public class ContiCCManager : IContiCCManager
     {
         readonly mySQLDbContext _dbContext;
 
-        public AgentiManager(mySQLDbContext dbContext)
+        public ContiCCManager(mySQLDbContext dbContext)
         {
             _dbContext = dbContext;
             _dbContext.Database.SetCommandTimeout(TimeSpan.FromSeconds(180));
         }
 
-        //Leggo tutti i Rks Agenti
-        public List<Agente> GetAgenti()
+        //Leggo tutti i Rks ContiCC
+        public List<ContoCC> GetContiCC()
         {
             try
             {
-                return _dbContext.Agenti.ToList();
+                return _dbContext.ContiCC.ToList();
             }
             catch (Exception ex)
             {
                 _ = ex.Message;
-                return new List<Agente>();
+                return new List<ContoCC>();
             }
         }
 
-        //Aggiungo un Agente  
-        public string AddAgente(Agente rk)
+        //Aggiungo un ContoCC  
+        public string AddContoCC(ContoCC rk)
         {
             try
             {
-                _dbContext.Agenti.Add(rk);
+                _dbContext.ContiCC.Add(rk);
                 _dbContext.SaveChanges();
             }
             catch (Exception ex)
@@ -48,10 +48,10 @@ namespace myWebApp.Services
             return "OK";
         }
 
-        //Update di un Rk Agente  
-        public string UpdateAgente(string IdAgente, Agente rk)
+        //Update di un Rk ContoCC  
+        public string UpdateContoCC(string IdContoCC, ContoCC rk)
         {
-            if (IdAgente != rk.IDAgente) {
+            if (IdContoCC != rk.IDContoCC) {
                 return "NOTFOUND";
             }
             try
@@ -67,12 +67,12 @@ namespace myWebApp.Services
             return "OK";
         }
 
-        //Leggo un Rk Agente  
-        public Agente GetAgente(string codice)
+        //Leggo un Rk ContoCC  
+        public ContoCC GetContoCC(string codice)
         {
             try
             {
-                Agente? rk = _dbContext.Agenti.Find(codice);
+                ContoCC? rk = _dbContext.ContiCC.Find(codice);
 
                 if (rk != null)
                 {
@@ -89,43 +89,39 @@ namespace myWebApp.Services
             }
         }
 
-        //Rimozione di un Rk Agente    
-        public Agente DeleteAgente(string IdAgente)
+        //Rimozione di un Rk ContoCC    
+        public ContoCC DeleteContoCC(string IdContoCC)
         {
-            Agente? rk;
+            ContoCC? rk;
 
             try
             {
-                rk = _dbContext.Agenti.Find(IdAgente);
+                rk = _dbContext.ContiCC.Find(IdContoCC);
 
                 if (rk != null)
                 {
                     try
                     {
-                        _dbContext.Agenti.Remove(rk);
+                        _dbContext.ContiCC.Remove(rk);
                         _dbContext.SaveChanges();
                     }
-                    catch (Exception ex)
-                    {
+                    catch (Exception ex) {
                         //Errore tipicamente in caso di foreign key violation
-                        return new Agente { RagioneSociale = "KO" };
+                        return new ContoCC{ Descrizione = "KO" };
                     }
-
+                    
                 }
                 else
                 {
-                    return new Agente { RagioneSociale = "NOTFOUND" };
+                    return new ContoCC { Descrizione = "NOTFOUND" };
                 }
             }
             catch
             {
-                return new Agente { RagioneSociale = "KO" };
+                return new ContoCC { Descrizione = "KO" };
             }
             return rk;
         }
-
-
-
     }
 }
 

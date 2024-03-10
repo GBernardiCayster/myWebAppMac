@@ -74,6 +74,7 @@ namespace myWebApp {
             });
 
             builder.Services.AddTransient<IAgentiManager, AgentiManager>();
+            builder.Services.AddTransient<IContiCCManager, ContiCCManager>();
 
             var app = builder.Build();
 

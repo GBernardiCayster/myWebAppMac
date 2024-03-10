@@ -13,6 +13,6 @@ namespace myWebApp.Interfaces
 
         public Agente GetAgente(string IdAgente);
 
-        public string DeleteAgente(string IdAgente);
+        public Agente DeleteAgente(string IdAgente);
     }
 }

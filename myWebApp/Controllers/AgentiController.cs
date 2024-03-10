@@ -117,31 +117,20 @@ namespace myWebApp.Controllers
 
         [HttpDelete("{*IdAgente}")]
         [Authorize(Roles = "Administrator,User")]
-        public IActionResult Delete(string IdAgente)
+        public Agente Delete(string IdAgente)
         {
             try
             {
-                string rc = AgentiMngr.DeleteAgente(IdAgente);
+                Agente rk = AgentiMngr.DeleteAgente(IdAgente);
 
-                if ( rc == "OK")
-                {
-                    return Ok();
-                }
-                else {
-                    if (rc == "NOTFOUND") {
-                        return NotFound();
-                    }
-                    else {
-                        return BadRequest();
-                    }
-                }
+                return rk;
 
             }
-            catch (Exception ex) {
-                return BadRequest();
+            catch (Exception ex)
+            {
+                return new Agente { RagioneSociale = "KO" };
             }
         }
-
 
         [HttpGet("GetListReport/{writerFormat}")]
         public async Task<String> GetListReport(string writerFormat)
