@@ -92,6 +92,22 @@ namespace myWebApp.Client.Authentication
 
             return result;
         }
+
+        public async Task<string> GetuserName()
+        {
+            var result = string.Empty;
+
+            try
+            {
+                var userSession = await _sessionStorage.ReadEncryptedItemAsync<UserSession>("UserSession");
+                if (userSession != null && DateTime.Now < userSession.ExpiryTimeStamp)
+                    result = userSession.UserName;
+            }
+            catch { }
+
+            return result;
+        }
+
     }
 }
 

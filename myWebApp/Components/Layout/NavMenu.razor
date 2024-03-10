@@ -42,24 +42,6 @@
             }
         );
 
-        TreeDataSource.Add(new
-            TreeItem
-            {
-                NodeId = "02",
-                NodeText = "Anagrafiche",
-                Expanded = false,
-                NavigateUrl = "/",
-                Icon = "fa fa-users",
-                Child = new List<TreeItem>()
-                        {
-                            new TreeItem { NodeId = "02-01", NodeText = "Agenti", Icon = "fa fa-user-circle", NavigateUrl="Agenti" },
-                            new TreeItem { NodeId = "02-02", NodeText = "Clienti", Icon = "fa fa-user", NavigateUrl="Clienti" },
-new TreeItem { NodeId = "02-07", NodeText = "Conti C/C", Icon = "fa fa-university", NavigateUrl="ContiCC" },
-                            new TreeItem { NodeId = "02-08", NodeText = "Cond. Pagamento", Icon = "fa fa-credit-card", NavigateUrl="Pagamenti" },
-                            new TreeItem { NodeId = "02-09", NodeText = "Zone", Icon = "fa fa-map-marker", NavigateUrl="Login" }
-                        }
-            }
-        );
 
     }
     class TreeItem

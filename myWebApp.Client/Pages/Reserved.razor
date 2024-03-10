@@ -1,0 +1,114 @@
+@page "/reserved"
+@rendermode InteractiveWebAssemblyNoPreRender
+
+@inject HttpClient Http
+@inject NavigationManager navManager
+
+
+@inject AuthenticationStateProvider authenticationStateProvider
+@using myWebApp.Client.Authentication
+
+
+
+<PageTitle>Home</PageTitle>
+
+
+<div class="row">
+
+    <div class="col-12">
+        <h2>Benvenuto @UserName nella tua area riservata</h2>
+    </div>
+    <div class="col-12">
+        <h4>Seleziona una funzione tra quelle seguenti abilitate per il tuo profilo</h4>
+    </div>
+    <div class = "row">
+        &nbsp;
+    </div>
+
+    <div class="col-4">
+        <SfTreeView TValue="TreeItem">
+            <TreeViewFieldsSettings DataSource="@TreeDataSource" Id="NodeId" Text="NodeText" Expanded="Expanded" IconCss="Icon"
+                Child="@("Child")"></TreeViewFieldsSettings>
+        </SfTreeView>
+    </div>
+
+    <div class="col-4">
+        <SfTreeView TValue="TreeItem">
+            <TreeViewFieldsSettings DataSource="@TreeDataSource" Id="NodeId" Text="NodeText" Expanded="Expanded"
+                IconCss="Icon" Child="@("Child")"></TreeViewFieldsSettings>
+        </SfTreeView>
+    </div>
+
+    <div class="col-4">
+        <SfTreeView TValue="TreeItem">
+            <TreeViewFieldsSettings DataSource="@TreeDataSource" Id="NodeId" Text="NodeText" Expanded="Expanded"
+                IconCss="Icon" Child="@("Child")"></TreeViewFieldsSettings>
+        </SfTreeView>
+    </div>
+
+</div>
+
+
+
+
+@code {
+
+    List<TreeItem> TreeDataSource = new List<TreeItem>();
+    string UserName { get; set; }
+    static InteractiveWebAssemblyRenderMode InteractiveWebAssemblyNoPreRender = new(false);
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        var customAuthStateProvider = (CustomAuthenticationStateProvider)authenticationStateProvider;
+        var token = await customAuthStateProvider.GetToken();
+        if (!string.IsNullOrWhiteSpace(token))
+        {
+            UserName = await customAuthStateProvider.GetuserName();
+        }
+        else
+        {
+            //Customer not logged in or expired token
+            navManager.NavigateTo("/");
+        }
+
+        //Show Menu Items is possible to change between Users... for now is the same for all
+
+
+        TreeDataSource.Add(new
+        TreeItem
+            {
+                NodeId = "01",
+                NodeText = "Anagrafiche",
+                Expanded = false,
+                NavigateUrl = "/reserved",
+                Icon = "fa fa-users",
+                Child = new List<TreeItem>()
+                    {
+                    new TreeItem { NodeId = "01-01", NodeText = "Agenti", Icon = "fa fa-user-circle", NavigateUrl="Agenti" },
+                    new TreeItem { NodeId = "01-02", NodeText = "Clienti", Icon = "fa fa-user", NavigateUrl="Clienti" },
+                    new TreeItem { NodeId = "01-07", NodeText = "Conti C/C", Icon = "fa fa-university", NavigateUrl = "ContiCC" },
+                    new TreeItem { NodeId = "01-08", NodeText = "Cond. Pagamento", Icon = "fa fa-credit-card", NavigateUrl = "Pagamenti" },
+                    new TreeItem { NodeId = "01-09", NodeText = "Zone", Icon = "fa fa-map-marker", NavigateUrl = "Login" }
+                    }
+            }
+        );
+
+
+    }
+
+
+
+    class TreeItem
+    {
+        public string? NodeId { get; set; }
+        public string? NodeText { get; set; }
+        public string? Icon { get; set; }
+        public bool Expanded { get; set; }
+        public bool Selected { get; set; }
+        public string? NavigateUrl { get; set; }
+        public List<TreeItem>? Child { get; set; }
+    }
+
+
+}

@@ -36,7 +36,8 @@ namespace myWebApp.Controllers
             return await Task.FromResult(AgentiMngr.GetAgenti());
         }
 
-        [HttpGet("{idagente}")]
+
+        [HttpGet("{*idagente}")]
         [Authorize(Roles = "Administrator,User")]
         public IActionResult Get(string idagente)
         {
@@ -80,7 +81,7 @@ namespace myWebApp.Controllers
             }
         }
 
-        [HttpPut("{IdAgente}")]
+        [HttpPut("{*IdAgente}")]
         [Authorize(Roles = "Administrator,User")]
         public IActionResult Put(string IdAgente, Agente rk)
         {
@@ -114,7 +115,7 @@ namespace myWebApp.Controllers
 
 
 
-        [HttpDelete("{IdAgente}")]
+        [HttpDelete("{*IdAgente}")]
         [Authorize(Roles = "Administrator,User")]
         public IActionResult Delete(string IdAgente)
         {

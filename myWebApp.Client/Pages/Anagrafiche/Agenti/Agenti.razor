@@ -1,0 +1,317 @@
+﻿@page "/Agenti"
+@rendermode InteractiveWebAssemblyNoPreRender
+
+@inject HttpClient Http
+@inject NavigationManager navManager
+@inject IJSRuntime JS
+
+@inject AuthenticationStateProvider authenticationStateProvider
+@using myWebApp.Client.Authentication
+
+<PageTitle>Lista Agenti</PageTitle>
+
+@if (Array_Agenti is null)
+{
+    <div class="row">
+
+    <div class="col-sm">
+        <div class="spin-row">
+            <SfSpinner Size="40" Label="Lettura dati in corso... Attendere" Type="SpinnerType.Bootstrap5"
+                Visible="true"></SfSpinner>
+        </div>
+    </div>
+
+</div>
+}
+else
+{
+    <div class="container-fluid">
+
+    <div class="row">
+
+        <div class="col-2">
+            <SfButton title="Home" IconCss="fa fa-arrow-left" CssClass="e-small e-round mb-2" IsPrimary="true"
+                @onclick="onReservedClick"></SfButton>
+        </div>
+        <div class="col-10 d-flex justify-content-center ">
+            <h1> Lista Agenti (@DataBaseId)</h1>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+            <SfButton title="Aggiungi" IconCss="fa fa-add" CssClass="e-small e-round mb-2" IsPrimary="true"
+                @onclick="onAddClick"></SfButton>
+        </div>
+
+        <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+            <SfButton title="Modifica" IconCss="fa fa-edit" CssClass="e-small e-round mb-2" IsPrimary="true"
+                @onclick="onEditClick"></SfButton>
+        </div>
+
+        <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+            <SfButton title="Rimuovi" IconCss="fa fa-trash" CssClass="e-small e-round mb-2" IsPrimary="true"
+                @onclick="onRemoveClick"></SfButton>
+        </div>
+
+        <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6 text-end">
+            <SfButton title="Stampa" IconCss="fa fa-print" CssClass="e-small e-round mb-2" IsPrimary="true"
+                @onclick="onPrintClick"></SfButton>
+        </div>
+    </div>
+
+    <SfGrid @ref="Grid" DataSource="@Array_Agenti" AllowSorting="true" AllowFiltering="true" AllowPaging="true">
+        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+        <GridPageSettings PageSize="15" PageSizes="true"></GridPageSettings>
+        <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"
+            Type="Syncfusion.Blazor.Grids.SelectionType.Multiple">
+        </GridSelectionSettings>
+        <GridEvents OnRecordDoubleClick="RecordDoubleClickHandler" TValue="Agente"></GridEvents>
+        <GridColumns>
+            <GridColumn Type="ColumnType.CheckBox" AllowFiltering="false" AllowSorting="false" Width="50">
+            </GridColumn>
+            <GridColumn Field=@nameof(Agente.RagioneSociale) HeaderText="Ragione Sociale" TextAlign="TextAlign.Left"
+                Width="25%"></GridColumn>
+            <GridColumn Field=@nameof(Agente.Indirizzo) HeaderText="Indirizzo" Width="25%"></GridColumn>
+            <GridColumn Field=@nameof(Agente.CAP) HeaderText="CAP" TextAlign="TextAlign.Left" Width="10%">
+            </GridColumn>
+            <GridColumn Field=@nameof(Agente.Localita) HeaderText="Localita'" Width="25%"></GridColumn>
+            <GridColumn Field=@nameof(Agente.Provincia) HeaderText="Prov." TextAlign="TextAlign.Left" Width="15%">
+            </GridColumn>
+
+        </GridColumns>
+
+    </SfGrid>
+</div>
+
+    <div class="spin-row">
+        <SfSpinner Size="80" Label="Stampa in Corso..." Type="SpinnerType.Bootstrap5" Visible="@PrintWaitVisible" />
+    </div>
+}
+
+<SfDialog Width="30%" Height="20%" IsModal="true" @bind-Visible="RemoveDialogVisibility">
+    <DialogTemplates>
+        <Header> Attenzione </Header>
+        <Content>
+            <p>Confermi la rimozione degli Agenti selezionati?</p>
+        </Content>
+    </DialogTemplates>
+    <DialogButtons>
+        <DialogButton Content="No" IsPrimary="true" OnClick="@RemoveDlgNoButtonClick" />
+        <DialogButton Content="Si" IsPrimary="false" OnClick="@RemoveDlgSiButtonClick" />
+
+    </DialogButtons>
+    <DialogAnimationSettings Effect="@DialogEffect.None"></DialogAnimationSettings>
+</SfDialog>
+
+<SfDialog Width="30%" Height="20%" IsModal="true" @bind-Visible="ErrorDialogVisibility">
+    <DialogTemplates>
+        <Header> Attenzione </Header>
+        <Content>
+            <div>@strMsgError</div>
+        </Content>
+    </DialogTemplates>
+    <DialogButtons>
+        <DialogButton Content="OK" IsPrimary="true" OnClick="@ErrorDlgOKButtonClick" />
+    </DialogButtons>
+    <DialogAnimationSettings Effect="@DialogEffect.None"></DialogAnimationSettings>
+</SfDialog>
+
+@code {
+
+    SfGrid<Agente>? Grid;
+    public List<Agente>? SelectedRows { get; set; }
+    public bool RemoveDialogVisibility = false;
+    public bool ErrorDialogVisibility = false;
+    public bool PrintWaitVisible = false;
+    static InteractiveWebAssemblyRenderMode InteractiveWebAssemblyNoPreRender = new(false);
+
+    public string DataBaseId { get; set; } = string.Empty;
+
+    public List<Agente>? Array_Agenti { get; set; }
+
+    string strMsgError = ""; //Messaggio di errore da presentare all'utente
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+
+
+        bool IsTokenOk = await SetHttpTokenAndDb();
+        if (!IsTokenOk)
+        {
+            return;
+        }
+
+        try
+        {
+            Array_Agenti = await Http.GetFromJsonAsync<List<Agente>>("api/Agenti") ?? new List<Agente>();
+        }
+        catch (Exception ex)
+        {
+            //Eccezione in lettura ... ad esempio per Ruolo utente non abilitato alla lettura 403 Forbidden
+            Array_Agenti = new List<Agente>();
+        }
+
+        await InvokeAsync(StateHasChanged);
+
+
+    }
+
+    async Task<bool> SetHttpTokenAndDb()
+    {
+        var customAuthStateProvider = (CustomAuthenticationStateProvider)authenticationStateProvider;
+        var token = await customAuthStateProvider.GetToken();
+        DataBaseId = await customAuthStateProvider.GetDataBaseId();
+        if (!string.IsNullOrWhiteSpace(token))
+        {
+
+            Http.DefaultRequestHeaders.Clear();
+
+            Http.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", token);
+            Http.DefaultRequestHeaders.Add("dbName", DataBaseId);
+
+        }
+        else
+        {
+            navManager.NavigateTo("/login/Agenti");
+            return false;
+        }
+
+        return true;
+
+    }
+
+
+    private void onReservedClick(MouseEventArgs args) {
+        //Redirect to Reserved
+        navManager.NavigateTo("Reserved");
+    }
+
+    private void onAddClick(MouseEventArgs args)
+    {
+        //Redirect
+        navManager.NavigateTo("AddEditAgente/NEW|XXX");
+
+    }
+
+
+    private async void onEditClick(MouseEventArgs args)
+    {
+        SelectedRows = await Grid.GetSelectedRecordsAsync();
+
+        if (SelectedRows.Count > 0)
+        {
+            //Edit to First Selected Item
+            Agente RkSelected = SelectedRows[0];
+            navManager.NavigateTo("AddEditAgente/EDIT|" + RkSelected.IDAgente);
+        }
+    }
+
+
+    public void RecordDoubleClickHandler(RecordDoubleClickEventArgs<Agente> args)
+    {
+        navManager.NavigateTo("AddEditAgente/EDIT|" + args.RowData.IDAgente);
+    }
+
+    private async void onRemoveClick(MouseEventArgs args)
+    {
+
+        SelectedRows = await Grid.GetSelectedRecordsAsync();
+        if (SelectedRows.Count > 0)
+        {
+            //Start confirm Delete Dialog
+            RemoveDialogVisibility = true;
+        }
+    }
+
+    private async void onPrintClick(MouseEventArgs args)
+    {
+        //Call BoldReport Controller for TestReport
+
+        PrintWaitVisible = true;
+        StateHasChanged();
+        string strPDF = await Http.GetStringAsync("/api/Agenti/GetListReport/" + "PDF");
+
+        PrintWaitVisible = false;
+        StateHasChanged();
+
+        try
+        {
+
+            await JS.InvokeAsync<object>("saveAsFile", "Agenti.pdf", strPDF);
+
+        }
+        catch (Exception ex)
+        {
+            _ = ex;
+        }
+    }
+
+    private async void RemoveDlgNoButtonClick()
+    {
+
+        //hide Dialog after remove selection
+        await Grid.ClearSelectionAsync();
+        RemoveDialogVisibility = false;
+    }
+
+
+    private async void ErrorDlgOKButtonClick()
+    {
+
+        //hide Error Dialog
+        ErrorDialogVisibility = false;
+    }
+
+
+    private async void RemoveDlgSiButtonClick(MouseEventArgs args)
+    {
+
+        RemoveDialogVisibility = false;
+
+        strMsgError = "";
+
+        if (SelectedRows is not null && SelectedRows.Count > 0)
+        {
+            foreach (Agente ag in SelectedRows)
+            {
+
+                try
+                {
+                    var rc = await Http.DeleteFromJsonAsync<Agente>("api/Agenti/" + ag.IDAgente);
+                }
+                catch (Exception ex)
+                {
+                    if (strMsgError == "")
+                    {
+                        strMsgError += "Errore rimozione agenti: " + ag.RagioneSociale;
+                    }
+                    else
+                    {
+                        strMsgError += " - " + ag.RagioneSociale;
+                    }
+
+                }
+            }
+
+            if (strMsgError != "")
+            {
+                //Errori in rimozione Agenti... tipicamemnte violazione di foreign key
+                ErrorDialogVisibility = true;
+            }
+        }
+
+        StateHasChanged();
+
+
+    }
+
+
+
+
+
+}

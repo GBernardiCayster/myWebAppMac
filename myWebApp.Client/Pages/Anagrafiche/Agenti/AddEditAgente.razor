@@ -1,4 +1,4 @@
-﻿@page "/AddEditAgente/{ParameterID}"
+﻿@page "/AddEditAgente/{*ParameterID}"
 @rendermode InteractiveWebAssemblyNoPreRender
 
 
@@ -10,15 +10,29 @@
 
 @if (fAddRecord)
 {
-    <h2>
-    Aggiungi nuovo Agente
-</h2>
+    <div class="row">
+        <div class="col-2">
+            <SfButton title="Back" IconCss="fa fa-arrow-left" CssClass="e-small e-round mb-2" IsPrimary="true"
+                @onclick="onBackPageClick"></SfButton>
+        </div>
+        <div class="col-10 d-flex justify-content-center ">
+            <h2> Aggiungi nuovo Agente</h2>
+        </div>
+    </div>
+
 }
 else
 {
-    <h2>
-    Modifica dati Agente @SelectedRK.RagioneSociale
-</h2>
+    <div class="row">
+        <div class="col-2">
+            <SfButton title="Back" IconCss="fa fa-arrow-left" CssClass="e-small e-round mb-2" IsPrimary="true"
+                @onclick="onBackPageClick"></SfButton>
+        </div>
+        <div class="col-10 d-flex justify-content-center ">
+            <h2> Modifica dati Agente @SelectedRK.RagioneSociale</h2>
+        </div>
+    </div>
+
 }
 
 <div class="row">
@@ -120,7 +134,10 @@ else
     }
 
 
-
+    private void onBackPageClick(MouseEventArgs args) {
+        //Redirect to Previous Page
+        navManager.NavigateTo("Agenti");
+    }
 
     private async void onValidSubmit()
     {

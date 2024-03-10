@@ -111,14 +111,9 @@
             var userSession = await loginResponse.Content.ReadFromJsonAsync<UserSession>();
             var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
             await customAuthStateProvider.UpdateAuthenticationState(userSession);
-            if (ParameterID != "" && ParameterID != "LOGOUT")
-            {
-                navManager.NavigateTo(ParameterID, true);
-            }
-            else
-            {
-                navManager.NavigateTo("/", true);
-            }
+
+            navManager.NavigateTo("/reserved", true);
+
         }
         else if (loginResponse.StatusCode == HttpStatusCode.Unauthorized)
         {
