@@ -75,8 +75,13 @@ namespace myWebApp {
 
             builder.Services.AddTransient<IClientiManager, ClientiManager>();
             builder.Services.AddTransient<IAgentiManager, AgentiManager>();
+            builder.Services.AddTransient<IContiCCManager, ContiCCManager>();          
+            
+            
             builder.Services.AddTransient<IZoneManager, ZoneManager>();
-            builder.Services.AddTransient<IContiCCManager, ContiCCManager>();
+            builder.Services.AddTransient<ITestateListiniManager, TestateListiniManager>();
+            builder.Services.AddTransient<ICategorieClientiManager, CategorieClientiManager>();
+            builder.Services.AddTransient<ICondizioniPagamentoManager, CondizioniPagamentoManager>();
 
             var app = builder.Build();
 

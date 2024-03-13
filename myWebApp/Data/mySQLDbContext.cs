@@ -15,6 +15,9 @@ namespace myWebApp.Data {
         public DbSet<CausaleCC> CausaliCC { get; set; } = null!;
         public DbSet<ContoCC> ContiCC { get; set; } = null!;
         public DbSet<Zona> Zone { get; set; } = null!;
+        public DbSet<TestataListino> TestateListini { get; set; } = null!;
+        public DbSet<CategoriaClienti> CategorieClienti { get; set; } = null!;
+        public DbSet<CondizionePagamento> CondizioniPagamento { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
 

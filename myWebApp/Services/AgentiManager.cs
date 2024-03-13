@@ -68,11 +68,11 @@ namespace myWebApp.Services
         }
 
         //Leggo un Rk Agente  
-        public Agente GetAgente(string codice)
+        public Agente GetAgente(string IDAgente)
         {
             try
             {
-                Agente? rk = _dbContext.Agenti.Find(codice);
+                Agente? rk = _dbContext.Agenti.Find(IDAgente);
 
                 if (rk != null)
                 {

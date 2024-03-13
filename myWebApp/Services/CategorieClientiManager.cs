@@ -8,36 +8,36 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace myWebApp.Services
 {
-    public class ZoneManager : IZoneManager
+    public class CategorieClientiManager : ICategorieClientiManager
     {
         readonly mySQLDbContext _dbContext;
 
-        public ZoneManager(mySQLDbContext dbContext)
+        public CategorieClientiManager(mySQLDbContext dbContext)
         {
             _dbContext = dbContext;
             _dbContext.Database.SetCommandTimeout(TimeSpan.FromSeconds(180));
         }
 
-        //Leggo tutti i Rks Zone
-        public List<Zona> GetZone()
+        //Leggo tutti i Rks CategorieClienti
+        public List<CategoriaClienti> GetCategorieClienti()
         {
             try
             {
-                return _dbContext.Zone.ToList();
+                return _dbContext.CategorieClienti.ToList();
             }
             catch (Exception ex)
             {
                 _ = ex.Message;
-                return new List<Zona>();
+                return new List<CategoriaClienti>();
             }
         }
 
-        //Aggiungo un Zona  
-        public string AddZona(Zona rk)
+        //Aggiungo un CategoriaClienti  
+        public string AddCategoriaClienti(CategoriaClienti rk)
         {
             try
             {
-                _dbContext.Zone.Add(rk);
+                _dbContext.CategorieClienti.Add(rk);
                 _dbContext.SaveChanges();
             }
             catch (Exception ex)
@@ -48,10 +48,10 @@ namespace myWebApp.Services
             return "OK";
         }
 
-        //Update di un Rk Zona  
-        public string UpdateZona(string IdZona, Zona rk)
+        //Update di un Rk CategoriaClienti  
+        public string UpdateCategoriaClienti(string IDCategoria, CategoriaClienti rk)
         {
-            if (IdZona != rk.IDZona) {
+            if (IDCategoria != rk.IDCategoria) {
                 return "NOTFOUND";
             }
             try
@@ -67,12 +67,12 @@ namespace myWebApp.Services
             return "OK";
         }
 
-        //Leggo un Rk Zona  
-        public Zona GetZona(string IDZona)
+        //Leggo un Rk CategoriaClienti  
+        public CategoriaClienti GetCategoriaClienti(string IDCategoria)
         {
             try
             {
-                Zona? rk = _dbContext.Zone.Find(IDZona);
+                CategoriaClienti? rk = _dbContext.CategorieClienti.Find(IDCategoria);
 
                 if (rk != null)
                 {
@@ -89,37 +89,37 @@ namespace myWebApp.Services
             }
         }
 
-        //Rimozione di un Rk Zona    
-        public Zona DeleteZona(string IdZona)
+        //Rimozione di un Rk CategoriaClienti    
+        public CategoriaClienti DeleteCategoriaClienti(string IDCategoria)
         {
-            Zona? rk;
+            CategoriaClienti? rk;
 
             try
             {
-                rk = _dbContext.Zone.Find(IdZona);
+                rk = _dbContext.CategorieClienti.Find(IDCategoria);
 
                 if (rk != null)
                 {
                     try
                     {
-                        _dbContext.Zone.Remove(rk);
+                        _dbContext.CategorieClienti.Remove(rk);
                         _dbContext.SaveChanges();
                     }
                     catch (Exception ex)
                     {
                         //Errore tipicamente in caso di foreign key violation
-                        return new Zona { Descrizione = "KO" };
+                        return new CategoriaClienti { Descrizione = "KO" };
                     }
 
                 }
                 else
                 {
-                    return new Zona { Descrizione = "NOTFOUND" };
+                    return new CategoriaClienti { Descrizione = "NOTFOUND" };
                 }
             }
             catch
             {
-                return new Zona { Descrizione = "KO" };
+                return new CategoriaClienti { Descrizione = "KO" };
             }
             return rk;
         }

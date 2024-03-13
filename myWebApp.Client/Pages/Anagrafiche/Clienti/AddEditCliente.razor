@@ -68,7 +68,7 @@ else
                                 <FormItem Field="@nameof(Cliente.Telefono)" LabelText="Telefono:" ColumnSpan="6" />
                                 <FormItem Field="@nameof(Cliente.EMail)" LabelText="E-Mail:" ColumnSpan="6" />
 
-                                <FormItem Field="@nameof(Cliente.IDZona)" ColumnSpan="12">
+                                <FormItem Field="@nameof(Cliente.IDZona)" ColumnSpan="6">
                                     <Template>
                                         <label class="e-form-label">Zona:</label>
                                         <SfDropDownList TValue="string" TItem="Zona" Placeholder="Seleziona Zona" DataSource="ArrayZone" @bind-Value="SelectedRK.IDZona">
@@ -76,6 +76,34 @@ else
                                         </SfDropDownList>
                                     </Template>
                                 </FormItem>
+
+                                <FormItem Field="@nameof(Cliente.IDPagamento)" ColumnSpan="6">
+                                    <Template>
+                                        <label class="e-form-label">Pagamento:</label>
+                                        <SfDropDownList TValue="string" TItem="CondizionePagamento" Placeholder="Seleziona Pagamento" DataSource="ArrayPagamenti" @bind-Value="SelectedRK.IDPagamento">
+                                            <DropDownListFieldSettings Value="IDPagamento" Text="Descrizione"></DropDownListFieldSettings>
+                                        </SfDropDownList>
+                                    </Template>
+                                </FormItem>     
+
+
+                                <FormItem Field="@nameof(Cliente.IDCategoria)" ColumnSpan="6">
+                                    <Template>
+                                        <label class="e-form-label">Categoria:</label>
+                                        <SfDropDownList TValue="string" TItem="CategoriaClienti" Placeholder="Seleziona Categoria" DataSource="ArrayCategorie" @bind-Value="SelectedRK.IDCategoria">
+                                            <DropDownListFieldSettings Value="IDCategoria" Text="Descrizione"></DropDownListFieldSettings>
+                                        </SfDropDownList>
+                                    </Template>
+                                </FormItem>
+
+                                <FormItem Field="@nameof(Cliente.IDListino)" ColumnSpan="6">
+                                    <Template>
+                                        <label class="e-form-label">Listino:</label>
+                                        <SfDropDownList TValue="string" TItem="TestataListino" Placeholder="Seleziona Listino" DataSource="ArrayListiini" @bind-Value="SelectedRK.IDListino">
+                                            <DropDownListFieldSettings Value="IDListino" Text="Descrizione"></DropDownListFieldSettings>
+                                        </SfDropDownList>
+                                    </Template>
+                                </FormItem>                              
 
                             </FormItems>
                             <FormButtons>
@@ -115,6 +143,9 @@ else
 
     public Cliente SelectedRK { get; set; } = new();
     public List<Zona> ArrayZone { get; set; }
+    public List<CondizionePagamento> ArrayPagamenti { get; set; }
+    public List<CategoriaClienti> ArrayCategorie { get; set; }
+    public List<TestataListino> ArrayListini { get; set; }
 
     public bool fAddRecord = true;
     public int ActiveTab = 0;
@@ -132,6 +163,10 @@ else
             SelectedRK = await Http.GetFromJsonAsync<Cliente>("api/Clienti/" + array_param[1]) ?? new Cliente();
 
             ArrayZone = await Http.GetFromJsonAsync<List<Zona>>("api/Zone") ?? new List<Zona>();
+            ArrayPagamenti = await Http.GetFromJsonAsync<List<CondizionePagamento>>("api/CondizioniPagamento") ?? new List<CondizionePagamento>();
+            ArrayCategorie = await Http.GetFromJsonAsync<List<CategoriaClienti>>("api/CategorieClienti") ?? new List<CategoriaClienti>();
+            ArrayListini = await Http.GetFromJsonAsync<List<TestataListino>>("api/TestateListini") ?? new List<TestataListino>();
+
             fAddRecord = false;
         }
         else
@@ -217,6 +252,9 @@ public class FluentValidator : AbstractValidator<Cliente>
             RuleFor(Cliente => Cliente.Telefono).MaximumLength(30).WithMessage("Il telefono non deve eccedere i 30 caratteri");
             RuleFor(Cliente => Cliente.EMail).MaximumLength(50).WithMessage("La E-Mail non deve eccedere i 50 caratteri");
             RuleFor(Cliente => Cliente.IDZona).NotEmpty().WithMessage("Deve essere selezionata una Zona");
+            RuleFor(Cliente => Cliente.IDPagamento).NotEmpty().WithMessage("Deve essere selezionato un Pagamento");
+            RuleFor(Cliente => Cliente.IDCategoria).NotEmpty().WithMessage("Deve essere selezionata una Categoria");
+            RuleFor(Cliente => Cliente.IDListino).NotEmpty().WithMessage("Deve essere selezionato un Listino");
         }
     }
 

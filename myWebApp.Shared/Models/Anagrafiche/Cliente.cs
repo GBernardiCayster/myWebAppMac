@@ -36,7 +36,7 @@ namespace myWebApp.Shared.Models
 
         [Column("Partita IVA")]
         [StringLength(11)]
-        public string? PartitaIva { get; set; }
+        public string? PartitaIVA { get; set; }
         [Column("Codice Fiscale")]
         [StringLength(16)]
         public string? CodiceFiscale { get; set; }
@@ -45,7 +45,7 @@ namespace myWebApp.Shared.Models
         [Column("EMail")]
 
         [StringLength(50)]
-        public string? Email { get; set; }
+        public string? EMail { get; set; }
 
         [StringLength(36)]
         [Required]
