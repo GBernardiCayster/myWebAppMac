@@ -40,6 +40,10 @@ namespace myWebApp.Shared.Models
 
         [MaxLength(50)]
         public string? EMail { get; set; }
+
+        [Required]
+        [MaxLength(36)]
+        public string IDZona { get; set; } = string.Empty;
         
     }
 }

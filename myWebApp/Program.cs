@@ -73,7 +73,9 @@ namespace myWebApp {
                 };
             });
 
+            builder.Services.AddTransient<IClientiManager, ClientiManager>();
             builder.Services.AddTransient<IAgentiManager, AgentiManager>();
+            builder.Services.AddTransient<IZoneManager, ZoneManager>();
             builder.Services.AddTransient<IContiCCManager, ContiCCManager>();
 
             var app = builder.Build();

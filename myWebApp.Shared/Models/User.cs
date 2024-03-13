@@ -19,7 +19,7 @@ namespace myWebApp.Shared.Models
         public string DataBaseName { get; set; } = "Giuliano";
 
 
-        public string Role { get; set; }
+        public string Role { get; set; } = "Administrator";
 
 
 

@@ -10,9 +10,11 @@ namespace myWebApp.Data {
         : base(options) {
         }
 
+        public DbSet<Cliente> Clienti { get; set; } = null!;
         public DbSet<Agente> Agenti { get; set; } = null!;
         public DbSet<CausaleCC> CausaliCC { get; set; } = null!;
         public DbSet<ContoCC> ContiCC { get; set; } = null!;
+        public DbSet<Zona> Zone { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
 

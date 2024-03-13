@@ -1,4 +1,4 @@
-﻿@page "/AddEditAgente/{*ParameterID}"
+﻿@page "/AddEditZona/{*ParameterID}"
 @rendermode InteractiveWebAssemblyNoPreRender
 
 
@@ -6,7 +6,7 @@
 @inject NavigationManager navManager
 @inject Microsoft.JSInterop.IJSRuntime JS
 
-<PageTitle>Anagrafica Agente</PageTitle>
+<PageTitle>Anagrafica Zona</PageTitle>
 
 @if (fAddRecord)
 {
@@ -16,7 +16,7 @@
                 @onclick="onBackPageClick"></SfButton>
         </div>
         <div class="col-10 d-flex justify-content-center ">
-            <h2> Aggiungi nuovo Agente</h2>
+            <h2> Aggiungi nuovo Zona</h2>
         </div>
     </div>
 
@@ -29,7 +29,7 @@ else
                 @onclick="onBackPageClick"></SfButton>
         </div>
         <div class="col-10 d-flex justify-content-center ">
-            <h2> Modifica dati Agente @SelectedRK.RagioneSociale</h2>
+            <h2> Modifica dati Zona @SelectedRK.Descrizione</h2>
         </div>
     </div>
 
@@ -55,28 +55,7 @@ else
                                 <Blazored.FluentValidation.FluentValidationValidator Validator="@fluentValidator"></Blazored.FluentValidation.FluentValidationValidator>
                             </FormValidator>
                             <FormItems>
-                                <FormItem Field="@nameof(SelectedRK.RagioneSociale)" LabelText="Ragione Sociale:" ColumnSpan="12"/>
-                                <FormItem Field="@nameof(SelectedRK.Indirizzo)" LabelText="Indirizzo:" ColumnSpan="12" />
-
-                                <FormItem Field="@nameof(SelectedRK.CAP)" LabelText="CAP:" ColumnSpan="3" />
-                                <FormItem Field="@nameof(Agente.Localita)" LabelText="Località:"  ColumnSpan="6"/>
-                                <FormItem Field="@nameof(Agente.Provincia)" LabelText="Prov.:" ColumnSpan="3" />
-
-                                <FormItem Field="@nameof(Agente.PartitaIVA)" LabelText="Partita IVA:" ColumnSpan="6" />
-                                <FormItem Field="@nameof(Agente.CodiceFiscale)" LabelText="Codice Fiscale:" ColumnSpan="6" />
-
-                                <FormItem Field="@nameof(Agente.Telefono)" LabelText="Telefono:" ColumnSpan="6" />
-                                <FormItem Field="@nameof(Agente.EMail)" LabelText="E-Mail:" ColumnSpan="6" />
-
-                                <FormItem Field="@nameof(Agente.IDZona)" ColumnSpan="12">
-                                    <Template>
-                                        <label class="e-form-label">Zona:</label>
-                                        <SfDropDownList TValue="string" TItem="Zona" Placeholder="Seleziona Zona" DataSource="ArrayZone" @bind-Value="SelectedRK.IDZona">
-                                            <DropDownListFieldSettings Value="IDZona" Text="Descrizione"></DropDownListFieldSettings>
-                                        </SfDropDownList>
-                                    </Template>
-                                </FormItem>
-
+                                <FormItem Field="@nameof(SelectedRK.Descrizione)" LabelText="Descrizione:" ColumnSpan="12"/>
                             </FormItems>
                             <FormButtons>
                                 <SfButton>Registra</SfButton>
@@ -113,8 +92,7 @@ else
 
     static InteractiveWebAssemblyRenderMode InteractiveWebAssemblyNoPreRender = new(false);
 
-    public Agente SelectedRK { get; set; } = new();
-    public List<Zona> ArrayZone { get; set; }
+    public Zona SelectedRK { get; set; } = new();
 
     public bool fAddRecord = true;
     public int ActiveTab = 0;
@@ -129,15 +107,14 @@ else
             //Strip eventuali apici
             array_param[1] = array_param[1].Replace("'", "");
 
-            SelectedRK = await Http.GetFromJsonAsync<Agente>("api/Agenti/" + array_param[1]) ?? new Agente();
+            SelectedRK = await Http.GetFromJsonAsync<Zona>("api/Zone/" + array_param[1]) ?? new Zona();
 
-            ArrayZone = await Http.GetFromJsonAsync<List<Zona>>("api/Zone") ?? new List<Zona>();
             fAddRecord = false;
         }
         else
         {
             //Add
-            SelectedRK = new Agente();
+            SelectedRK = new Zona();
 
             fAddRecord = true;
         }
@@ -148,7 +125,7 @@ else
 
     private void onBackPageClick(MouseEventArgs args) {
         //Redirect to Previous Page
-        navManager.NavigateTo("Agenti");
+        navManager.NavigateTo("Zone");
     }
 
     private async void onValidSubmit()
@@ -160,15 +137,15 @@ else
             //Add RK 
             try
             {
-                HttpResponseMessage response = await Http.PostAsJsonAsync<Agente>("api/Agenti", SelectedRK);
+                HttpResponseMessage response = await Http.PostAsJsonAsync<Zona>("api/Zone", SelectedRK);
                 if (!response.IsSuccessStatusCode) {
-                    strMsgError = "Errore immissione agente: " + SelectedRK.RagioneSociale;
+                    strMsgError = "Errore immissione Zona: " + SelectedRK.Descrizione;
                 }
             }
             catch (Exception ex)
             {
 
-                strMsgError = "Errore immissione agente: " + SelectedRK.RagioneSociale;
+                strMsgError = "Errore immissione Zona: " + SelectedRK.Descrizione;
 
             }
         }
@@ -176,13 +153,13 @@ else
             //Update
             try
             {
-                HttpResponseMessage response = await Http.PutAsJsonAsync<Agente>("api/Agenti/" + SelectedRK.IDAgente, SelectedRK);
+                HttpResponseMessage response = await Http.PutAsJsonAsync<Zona>("api/Zone/" + SelectedRK.IDZona, SelectedRK);
                 if (!response.IsSuccessStatusCode) {
-                    strMsgError = "Errore aggiornamento agente: " + SelectedRK.RagioneSociale;
+                    strMsgError = "Errore aggiornamento Zona: " + SelectedRK.Descrizione;
                 }         
             }
             catch (Exception ex) {
-                strMsgError = "Errore aggiornamento agente: " + SelectedRK.RagioneSociale;
+                strMsgError = "Errore aggiornamento Zona: " + SelectedRK.Descrizione;
             }
         }
 
@@ -194,7 +171,7 @@ else
         else
         {
             //Return to list
-            navManager.NavigateTo("Agenti");
+            navManager.NavigateTo("Zone");
         }
 
     }
@@ -203,20 +180,12 @@ else
         ErrorDialogVisibility = false;
     }
 
-public class FluentValidator : AbstractValidator<Agente>
+public class FluentValidator : AbstractValidator<Zona>
     {
         public FluentValidator()
         {
-            RuleFor(agente => agente.RagioneSociale).NotEmpty().WithMessage("La ragione sociale non deve essere vuota").MaximumLength(50).WithMessage("La ragione sociale non deve eccedere i 50 caratteri");
-            RuleFor(agente => agente.Indirizzo).MaximumLength(50).WithMessage("L'Indirizzo non deve eccedere i 50 caratteri");
-            RuleFor(agente => agente.CAP).MaximumLength(6).WithMessage("Il CAP non deve eccedere i 6 caratteri");
-            RuleFor(agente => agente.Localita).MaximumLength(50).WithMessage("La localita' non deve eccedere i 50 caratteri");
-            RuleFor(agente => agente.Provincia).MaximumLength(4).WithMessage("La provinca non deve eccedere i 4 caratteri");
-            RuleFor(agente => agente.PartitaIVA).MaximumLength(11).WithMessage("La partita IVA non deve eccedere gli 11 caratteri");
-            RuleFor(agente => agente.CodiceFiscale).MaximumLength(16).WithMessage("Il codice fiscale non deve eccedere i 16 caratteri");
-            RuleFor(agente => agente.Telefono).MaximumLength(30).WithMessage("Il telefono non deve eccedere i 30 caratteri");
-            RuleFor(agente => agente.EMail).MaximumLength(50).WithMessage("La E-Mail non deve eccedere i 50 caratteri");
-            RuleFor(agente => agente.IDZona).NotEmpty().WithMessage("Deve essere selezionata una Zona");
+            RuleFor(Zona => Zona.Descrizione).NotEmpty().WithMessage("La Descrizione non deve essere vuota").MaximumLength(50).WithMessage("La Descrizione non deve eccedere i 50 caratteri");
+
         }
     }
 

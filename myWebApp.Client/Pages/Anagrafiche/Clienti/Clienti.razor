@@ -1,4 +1,4 @@
-﻿@page "/Agenti"
+﻿@page "/Clienti"
 @rendermode InteractiveWebAssemblyNoPreRender
 
 @inject HttpClient Http
@@ -8,9 +8,9 @@
 @inject AuthenticationStateProvider authenticationStateProvider
 @using myWebApp.Client.Authentication
 
-<PageTitle>Lista Agenti</PageTitle>
+<PageTitle>Lista Clienti</PageTitle>
 
-@if (Array_Agenti is null)
+@if (Array_Clienti is null)
 {
     <div class="row">
 
@@ -34,7 +34,7 @@ else
                 @onclick="onReservedClick"></SfButton>
         </div>
         <div class="col-10 d-flex justify-content-center ">
-            <h1> Lista Agenti (@DataBaseId)</h1>
+            <h1> Lista Clienti (@DataBaseId)</h1>
         </div>
     </div>
 
@@ -62,23 +62,23 @@ else
         </div>
     </div>
 
-    <SfGrid @ref="Grid" DataSource="@Array_Agenti" AllowSorting="true" AllowFiltering="true" AllowPaging="true">
+    <SfGrid @ref="Grid" DataSource="@Array_Clienti" AllowSorting="true" AllowFiltering="true" AllowPaging="true">
         <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
         <GridPageSettings  PageSize="12" PageSizes="true"></GridPageSettings>
         <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"
             Type="Syncfusion.Blazor.Grids.SelectionType.Multiple">
         </GridSelectionSettings>
-        <GridEvents OnRecordDoubleClick="RecordDoubleClickHandler" TValue="Agente"></GridEvents>
+        <GridEvents OnRecordDoubleClick="RecordDoubleClickHandler" TValue="Cliente"></GridEvents>
         <GridColumns>
             <GridColumn Type="ColumnType.CheckBox" AllowFiltering="false" AllowSorting="false" Width="50">
             </GridColumn>
-            <GridColumn Field=@nameof(Agente.RagioneSociale) HeaderText="Ragione Sociale" TextAlign="TextAlign.Left"
+            <GridColumn Field=@nameof(Cliente.RagioneSociale) HeaderText="Ragione Sociale" TextAlign="TextAlign.Left"
                 Width="25%"></GridColumn>
-            <GridColumn Field=@nameof(Agente.Indirizzo) HeaderText="Indirizzo" Width="25%"></GridColumn>
-            <GridColumn Field=@nameof(Agente.CAP) HeaderText="CAP" TextAlign="TextAlign.Left" Width="10%">
+            <GridColumn Field=@nameof(Cliente.Indirizzo) HeaderText="Indirizzo" Width="25%"></GridColumn>
+            <GridColumn Field=@nameof(Cliente.CAP) HeaderText="CAP" TextAlign="TextAlign.Left" Width="10%">
             </GridColumn>
-            <GridColumn Field=@nameof(Agente.Localita) HeaderText="Localita'" Width="25%"></GridColumn>
-            <GridColumn Field=@nameof(Agente.Provincia) HeaderText="Prov." TextAlign="TextAlign.Left" Width="15%">
+            <GridColumn Field=@nameof(Cliente.Localita) HeaderText="Localita'" Width="25%"></GridColumn>
+            <GridColumn Field=@nameof(Cliente.Provincia) HeaderText="Prov." TextAlign="TextAlign.Left" Width="15%">
             </GridColumn>
 
         </GridColumns>
@@ -95,7 +95,7 @@ else
     <DialogTemplates>
         <Header> Attenzione </Header>
         <Content>
-            <p>Confermi la rimozione degli Agenti selezionati?</p>
+            <p>Confermi la rimozione degli Clienti selezionati?</p>
         </Content>
     </DialogTemplates>
     <DialogButtons>
@@ -121,8 +121,8 @@ else
 
 @code {
 
-    SfGrid<Agente>? Grid;
-    public List<Agente>? SelectedRows { get; set; }
+    SfGrid<Cliente>? Grid;
+    public List<Cliente>? SelectedRows { get; set; }
     public bool RemoveDialogVisibility = false;
     public bool ErrorDialogVisibility = false;
     public bool PrintWaitVisible = false;
@@ -130,7 +130,7 @@ else
 
     public string DataBaseId { get; set; } = string.Empty;
 
-    public List<Agente>? Array_Agenti { get; set; }
+    public List<Cliente>? Array_Clienti { get; set; }
 
     string strMsgError = ""; //Messaggio di errore da presentare all'utente
 
@@ -148,12 +148,12 @@ else
 
         try
         {
-            Array_Agenti = await Http.GetFromJsonAsync<List<Agente>>("api/Agenti") ?? new List<Agente>();
+            Array_Clienti = await Http.GetFromJsonAsync<List<Cliente>>("api/Clienti") ?? new List<Cliente>();
         }
         catch (Exception ex)
         {
             //Eccezione in lettura ... ad esempio per Ruolo utente non abilitato alla lettura 403 Forbidden
-            Array_Agenti = new List<Agente>();
+            Array_Clienti = new List<Cliente>();
         }
 
         await InvokeAsync(StateHasChanged);
@@ -177,7 +177,7 @@ else
         }
         else
         {
-            navManager.NavigateTo("/login/Agenti");
+            navManager.NavigateTo("/login/Clienti");
             return false;
         }
 
@@ -194,7 +194,7 @@ else
     private void onAddClick(MouseEventArgs args)
     {
         //Redirect
-        navManager.NavigateTo("AddEditAgente/NEW|XXX");
+        navManager.NavigateTo("AddEditCliente/NEW|XXX");
 
     }
 
@@ -206,15 +206,15 @@ else
         if (SelectedRows.Count > 0)
         {
             //Edit to First Selected Item
-            Agente RkSelected = SelectedRows[0];
-            navManager.NavigateTo("AddEditAgente/EDIT|" + RkSelected.IDAgente);
+            Cliente RkSelected = SelectedRows[0];
+            navManager.NavigateTo("AddEditCliente/EDIT|" + RkSelected.IDCliente);
         }
     }
 
 
-    public void RecordDoubleClickHandler(RecordDoubleClickEventArgs<Agente> args)
+    public void RecordDoubleClickHandler(RecordDoubleClickEventArgs<Cliente> args)
     {
-        navManager.NavigateTo("AddEditAgente/EDIT|" + args.RowData.IDAgente);
+        navManager.NavigateTo("AddEditCliente/EDIT|" + args.RowData.IDCliente);
     }
 
     private async void onRemoveClick(MouseEventArgs args)
@@ -234,7 +234,7 @@ else
 
         PrintWaitVisible = true;
         StateHasChanged();
-        string strPDF = await Http.GetStringAsync("/api/Agenti/GetListReport/" + "PDF");
+        string strPDF = await Http.GetStringAsync("/api/Clienti/GetListReport/" + "PDF");
 
         PrintWaitVisible = false;
         StateHasChanged();
@@ -242,7 +242,7 @@ else
         try
         {
 
-            await JS.InvokeAsync<object>("saveAsFile", "Agenti.pdf", strPDF);
+            await JS.InvokeAsync<object>("saveAsFile", "Clienti.pdf", strPDF);
 
         }
         catch (Exception ex)
@@ -277,24 +277,24 @@ else
 
         if (SelectedRows is not null && SelectedRows.Count > 0)
         {
-            foreach (Agente rk in SelectedRows)
+            foreach (Cliente rk in SelectedRows)
             {
 
                 try
                 {
 
-                    Agente deleted = await Http.DeleteFromJsonAsync<Agente>("api/Agenti/" + rk.IDAgente);
-                    if (deleted.IDAgente != rk.IDAgente)
+                    Cliente deleted = await Http.DeleteFromJsonAsync<Cliente>("api/Clienti/" + rk.IDCliente);
+                    if (deleted.IDCliente != rk.IDCliente)
                     {
                         //Error in Delete RK
-                        strMsgError += "Errore rimozione Agente: " + rk.RagioneSociale;
+                        strMsgError += "Errore rimozione Cliente: " + rk.RagioneSociale;
                     }
                 }
                 catch (Exception ex)
                 {
                     if (strMsgError == "")
                     {
-                        strMsgError += "Errore rimozione Agente: " + rk.RagioneSociale;
+                        strMsgError += "Errore rimozione Cliente: " + rk.RagioneSociale;
                     }
                     else
                     {
@@ -306,13 +306,13 @@ else
 
             if (strMsgError != "")
             {
-                //Errori in rimozione Agenti... tipicamemnte violazione di foreign key
+                //Errori in rimozione Clienti... tipicamemnte violazione di foreign key
                 ErrorDialogVisibility = true;
             }
             else
             {
                 //Refresh grid
-                Array_Agenti = await Http.GetFromJsonAsync<List<Agente>>("api/Agenti") ?? new List<Agente>();
+                Array_Clienti = await Http.GetFromJsonAsync<List<Cliente>>("api/Clienti") ?? new List<Cliente>();
             }
         }
 

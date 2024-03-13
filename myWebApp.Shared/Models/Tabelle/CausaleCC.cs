@@ -10,6 +10,7 @@ namespace myWebApp.Shared.Models
     public partial class CausaleCC
     {
         [Key]
+        [StringLength(36)]
         public string IDCausale { get; set; } = Guid.NewGuid().ToString();
 
 

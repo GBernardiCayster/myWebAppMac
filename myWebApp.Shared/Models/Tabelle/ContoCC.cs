@@ -11,7 +11,7 @@ namespace myWebApp.Shared.Models
     public partial class ContoCC
     {
         [Key]
-
+        [StringLength(36)]
         public string IDContoCC { get; set; } = string.Empty;
 
         [Required]

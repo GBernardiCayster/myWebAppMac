@@ -10,8 +10,8 @@ namespace myWebApp.Shared.Models
     public partial class Cliente
     {
         [Key]
-        [StringLength(20)]
-        public string Codice { get; set; } = string.Empty;
+        [StringLength(36)]
+        public string IDCliente { get; set; } = Guid.NewGuid().ToString();
 
         [Required]
         [Column("Ragione Sociale")]
@@ -23,9 +23,8 @@ namespace myWebApp.Shared.Models
         public string? Indirizzo { get; set; }
 
 
-        [Column("CAP")]
         [StringLength(6)]
-        public string? Cap { get; set; }
+        public string? CAP { get; set; }
 
 
         [StringLength(50)]
@@ -48,27 +47,26 @@ namespace myWebApp.Shared.Models
         [StringLength(50)]
         public string? Email { get; set; }
 
-        [StringLength(50)]
+        [StringLength(36)]
         [Required]
-        public string Pagamento { get; set; } = string.Empty;
+        public string IDPagamento { get; set; } = string.Empty;
 
-        [StringLength(50)]
-        [Column("Categoria Cliente")]
+        [StringLength(36)]
         [Required]
-        public string CategoriaCliente { get; set; } = string.Empty;
+        public string IDCategoria { get; set; } = string.Empty;
 
-        [StringLength(50)]
+        [StringLength(36)]
         [Required]
-        public string Zona { get; set; } = string.Empty;
+        public string IDZona { get; set; } = string.Empty;
 
-        [StringLength(20)]
+        [StringLength(36)]
         [Required]
-        public string Agente { get; set; } = string.Empty;
+        public string IDAgente { get; set; } = string.Empty;
 
 
-        [StringLength(35)]
+        [StringLength(36)]
         [Required]
-        public string Listino { get; set; } = string.Empty;
+        public string IDListino { get; set; } = string.Empty;
 
         [StringLength(128)]
         public string? PEC { get; set; }

@@ -1,4 +1,4 @@
-﻿@page "/Agenti"
+﻿@page "/Zone"
 @rendermode InteractiveWebAssemblyNoPreRender
 
 @inject HttpClient Http
@@ -8,9 +8,9 @@
 @inject AuthenticationStateProvider authenticationStateProvider
 @using myWebApp.Client.Authentication
 
-<PageTitle>Lista Agenti</PageTitle>
+<PageTitle>Lista Zone</PageTitle>
 
-@if (Array_Agenti is null)
+@if (Array_Zone is null)
 {
     <div class="row">
 
@@ -34,7 +34,7 @@ else
                 @onclick="onReservedClick"></SfButton>
         </div>
         <div class="col-10 d-flex justify-content-center ">
-            <h1> Lista Agenti (@DataBaseId)</h1>
+            <h1> Lista Zone (@DataBaseId)</h1>
         </div>
     </div>
 
@@ -56,46 +56,36 @@ else
                 @onclick="onRemoveClick"></SfButton>
         </div>
 
-        <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6 text-end">
-            <SfButton title="Stampa" IconCss="fa fa-print" CssClass="e-small e-round mb-2" IsPrimary="true"
-                @onclick="onPrintClick"></SfButton>
-        </div>
+
     </div>
 
-    <SfGrid @ref="Grid" DataSource="@Array_Agenti" AllowSorting="true" AllowFiltering="true" AllowPaging="true">
+    <SfGrid @ref="Grid" DataSource="@Array_Zone" AllowSorting="true" AllowFiltering="true" AllowPaging="true">
         <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
-        <GridPageSettings  PageSize="12" PageSizes="true"></GridPageSettings>
+        <GridPageSettings PageSize="12" PageSizes="true"></GridPageSettings>
         <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"
             Type="Syncfusion.Blazor.Grids.SelectionType.Multiple">
         </GridSelectionSettings>
-        <GridEvents OnRecordDoubleClick="RecordDoubleClickHandler" TValue="Agente"></GridEvents>
+        <GridEvents OnRecordDoubleClick="RecordDoubleClickHandler" TValue="Zona"></GridEvents>
         <GridColumns>
             <GridColumn Type="ColumnType.CheckBox" AllowFiltering="false" AllowSorting="false" Width="50">
             </GridColumn>
-            <GridColumn Field=@nameof(Agente.RagioneSociale) HeaderText="Ragione Sociale" TextAlign="TextAlign.Left"
-                Width="25%"></GridColumn>
-            <GridColumn Field=@nameof(Agente.Indirizzo) HeaderText="Indirizzo" Width="25%"></GridColumn>
-            <GridColumn Field=@nameof(Agente.CAP) HeaderText="CAP" TextAlign="TextAlign.Left" Width="10%">
-            </GridColumn>
-            <GridColumn Field=@nameof(Agente.Localita) HeaderText="Localita'" Width="25%"></GridColumn>
-            <GridColumn Field=@nameof(Agente.Provincia) HeaderText="Prov." TextAlign="TextAlign.Left" Width="15%">
-            </GridColumn>
+            <GridColumn Field=@nameof(Zona.Descrizione) HeaderText="Ragione Sociale" TextAlign="TextAlign.Left"
+                Width="100%"></GridColumn>
+
 
         </GridColumns>
 
     </SfGrid>
 </div>
 
-    <div class="spin-row">
-        <SfSpinner Size="80" Label="Stampa in Corso..." Type="SpinnerType.Bootstrap5" Visible="@PrintWaitVisible" />
-    </div>
+
 }
 
 <SfDialog Width="30%" Height="20%" IsModal="true" @bind-Visible="RemoveDialogVisibility">
     <DialogTemplates>
         <Header> Attenzione </Header>
         <Content>
-            <p>Confermi la rimozione degli Agenti selezionati?</p>
+            <p>Confermi la rimozione delle Zone selezionate?</p>
         </Content>
     </DialogTemplates>
     <DialogButtons>
@@ -121,16 +111,16 @@ else
 
 @code {
 
-    SfGrid<Agente>? Grid;
-    public List<Agente>? SelectedRows { get; set; }
+    SfGrid<Zona>? Grid;
+    public List<Zona>? SelectedRows { get; set; }
     public bool RemoveDialogVisibility = false;
     public bool ErrorDialogVisibility = false;
-    public bool PrintWaitVisible = false;
+
     static InteractiveWebAssemblyRenderMode InteractiveWebAssemblyNoPreRender = new(false);
 
     public string DataBaseId { get; set; } = string.Empty;
 
-    public List<Agente>? Array_Agenti { get; set; }
+    public List<Zona>? Array_Zone { get; set; }
 
     string strMsgError = ""; //Messaggio di errore da presentare all'utente
 
@@ -148,12 +138,12 @@ else
 
         try
         {
-            Array_Agenti = await Http.GetFromJsonAsync<List<Agente>>("api/Agenti") ?? new List<Agente>();
+            Array_Zone = await Http.GetFromJsonAsync<List<Zona>>("api/Zone") ?? new List<Zona>();
         }
         catch (Exception ex)
         {
             //Eccezione in lettura ... ad esempio per Ruolo utente non abilitato alla lettura 403 Forbidden
-            Array_Agenti = new List<Agente>();
+            Array_Zone = new List<Zona>();
         }
 
         await InvokeAsync(StateHasChanged);
@@ -177,7 +167,7 @@ else
         }
         else
         {
-            navManager.NavigateTo("/login/Agenti");
+            navManager.NavigateTo("/login/Zone");
             return false;
         }
 
@@ -194,7 +184,7 @@ else
     private void onAddClick(MouseEventArgs args)
     {
         //Redirect
-        navManager.NavigateTo("AddEditAgente/NEW|XXX");
+        navManager.NavigateTo("AddEditZona/NEW|XXX");
 
     }
 
@@ -206,15 +196,15 @@ else
         if (SelectedRows.Count > 0)
         {
             //Edit to First Selected Item
-            Agente RkSelected = SelectedRows[0];
-            navManager.NavigateTo("AddEditAgente/EDIT|" + RkSelected.IDAgente);
+            Zona RkSelected = SelectedRows[0];
+            navManager.NavigateTo("AddEditZona/EDIT|" + RkSelected.IDZona);
         }
     }
 
 
-    public void RecordDoubleClickHandler(RecordDoubleClickEventArgs<Agente> args)
+    public void RecordDoubleClickHandler(RecordDoubleClickEventArgs<Zona> args)
     {
-        navManager.NavigateTo("AddEditAgente/EDIT|" + args.RowData.IDAgente);
+        navManager.NavigateTo("AddEditZona/EDIT|" + args.RowData.IDZona);
     }
 
     private async void onRemoveClick(MouseEventArgs args)
@@ -228,28 +218,7 @@ else
         }
     }
 
-    private async void onPrintClick(MouseEventArgs args)
-    {
-        //Call BoldReport Controller for TestReport
 
-        PrintWaitVisible = true;
-        StateHasChanged();
-        string strPDF = await Http.GetStringAsync("/api/Agenti/GetListReport/" + "PDF");
-
-        PrintWaitVisible = false;
-        StateHasChanged();
-
-        try
-        {
-
-            await JS.InvokeAsync<object>("saveAsFile", "Agenti.pdf", strPDF);
-
-        }
-        catch (Exception ex)
-        {
-            _ = ex;
-        }
-    }
 
     private async void RemoveDlgNoButtonClick()
     {
@@ -277,28 +246,28 @@ else
 
         if (SelectedRows is not null && SelectedRows.Count > 0)
         {
-            foreach (Agente rk in SelectedRows)
+            foreach (Zona rk in SelectedRows)
             {
 
                 try
                 {
 
-                    Agente deleted = await Http.DeleteFromJsonAsync<Agente>("api/Agenti/" + rk.IDAgente);
-                    if (deleted.IDAgente != rk.IDAgente)
+                    Zona deleted = await Http.DeleteFromJsonAsync<Zona>("api/Zone/" + rk.IDZona);
+                    if (deleted.IDZona != rk.IDZona)
                     {
                         //Error in Delete RK
-                        strMsgError += "Errore rimozione Agente: " + rk.RagioneSociale;
+                        strMsgError += "Errore rimozione Zona: " + rk.Descrizione;
                     }
                 }
                 catch (Exception ex)
                 {
                     if (strMsgError == "")
                     {
-                        strMsgError += "Errore rimozione Agente: " + rk.RagioneSociale;
+                        strMsgError += "Errore rimozione Zona: " + rk.Descrizione;
                     }
                     else
                     {
-                        strMsgError += " - " + rk.RagioneSociale;
+                        strMsgError += " - " + rk.Descrizione;
                     }
 
                 }
@@ -306,13 +275,13 @@ else
 
             if (strMsgError != "")
             {
-                //Errori in rimozione Agenti... tipicamemnte violazione di foreign key
+                //Errori in rimozione Zone... tipicamemnte violazione di foreign key
                 ErrorDialogVisibility = true;
             }
             else
             {
                 //Refresh grid
-                Array_Agenti = await Http.GetFromJsonAsync<List<Agente>>("api/Agenti") ?? new List<Agente>();
+                Array_Zone = await Http.GetFromJsonAsync<List<Zona>>("api/Zone") ?? new List<Zona>();
             }
         }
 

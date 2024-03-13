@@ -3,15 +3,9 @@ Syncfusion licenza:
 Ngo9BigBOggjHTQxAR8/V1NAaF1cXmhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnxTdEFjW31WcXBXRWJVVU11Ww==
 
 () Import strutture e dati per
-() Clienti, () Clienti Indirizzi, () Clienti Documenti, () Clienti Contatti
-() Listini, Articoli
-(X) Agenti, () Condizioni di Pagamento, () Zone
+(x) Clienti, () Clienti Indirizzi, () Clienti Documenti, () Clienti Contatti
+(X) Agenti, () Condizioni di Pagamento, (x) Zone  () Categorie Clienti  () Testate Listini
 
-() Controller per i dati sopra
-
-(x) group menu
-(x) Lista Agenti con Aggiungi / Modifica / Rimuovi / Stampa
-() Edit Agente per Add/Edit
-() report Agenti
+() Gestione anagrafica clienti con Indirizzi, Documenti e Contatti
 
 
