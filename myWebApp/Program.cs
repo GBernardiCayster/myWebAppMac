@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using myWebApp.Components;
+
 using myWebApp.Data;
 using Syncfusion.Blazor;
 using myWebApp.Interfaces;
@@ -56,6 +56,9 @@ namespace myWebApp {
             builder.Services.AddSyncfusionBlazor();
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NAaF1cXmhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnxTdEFjW31WcXBXRWJVVU11Ww==");
 
+
+            builder.Services.AddCascadingAuthenticationState();
+
             builder.Services.AddAuthentication(o =>
             {
                 o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -72,6 +75,7 @@ namespace myWebApp {
                     ValidateAudience = false
                 };
             });
+
 
             builder.Services.AddTransient<IClientiManager, ClientiManager>();
             builder.Services.AddTransient<IAgentiManager, AgentiManager>();

@@ -49,7 +49,7 @@ else
                     </ChildContent>
                     <ContentTemplate>
 
-                        <SfDataForm  Model="@SelectedRK" ColumnCount=12 ColumnSpacing="10px" OnValidSubmit="onValidSubmit"
+                        <SfDataForm  Model="@SelectedRK" ColumnCount="16" ColumnSpacing="10px" OnValidSubmit="onValidSubmit"
                             ButtonsAlignment="FormButtonsAlignment.Right">
                             <FormValidator>
                                 <Blazored.FluentValidation.FluentValidationValidator Validator="@fluentValidator"></Blazored.FluentValidation.FluentValidationValidator>
@@ -68,24 +68,14 @@ else
                                 <FormItem Field="@nameof(Cliente.Telefono)" LabelText="Telefono:" ColumnSpan="6" />
                                 <FormItem Field="@nameof(Cliente.EMail)" LabelText="E-Mail:" ColumnSpan="6" />
 
-                                <FormItem Field="@nameof(Cliente.IDZona)" ColumnSpan="6">
+                              <FormItem Field="@nameof(Cliente.IDListino)" ColumnSpan="6">
                                     <Template>
-                                        <label class="e-form-label">Zona:</label>
-                                        <SfDropDownList TValue="string" TItem="Zona" Placeholder="Seleziona Zona" DataSource="ArrayZone" @bind-Value="SelectedRK.IDZona">
-                                            <DropDownListFieldSettings Value="IDZona" Text="Descrizione"></DropDownListFieldSettings>
-                                        </SfDropDownList>
-                                    </Template>
-                                </FormItem>
-
-                                <FormItem Field="@nameof(Cliente.IDPagamento)" ColumnSpan="6">
-                                    <Template>
-                                        <label class="e-form-label">Pagamento:</label>
-                                        <SfDropDownList TValue="string" TItem="CondizionePagamento" Placeholder="Seleziona Pagamento" DataSource="ArrayPagamenti" @bind-Value="SelectedRK.IDPagamento">
-                                            <DropDownListFieldSettings Value="IDPagamento" Text="Descrizione"></DropDownListFieldSettings>
+                                        <label class="e-form-label">Listino:</label>
+                                        <SfDropDownList TValue="string" TItem="TestataListino" Placeholder="Seleziona Listino" DataSource="ArrayListini" @bind-Value="SelectedRK.IDListino">
+                                            <DropDownListFieldSettings Value="IDListino" Text="Descrizione"></DropDownListFieldSettings>
                                         </SfDropDownList>
                                     </Template>
                                 </FormItem>     
-
 
                                 <FormItem Field="@nameof(Cliente.IDCategoria)" ColumnSpan="6">
                                     <Template>
@@ -96,23 +86,63 @@ else
                                     </Template>
                                 </FormItem>
 
-                                <FormItem Field="@nameof(Cliente.IDListino)" ColumnSpan="6">
+                                <FormItem Field="@nameof(Cliente.IDZona)" ColumnSpan="6">
                                     <Template>
-                                        <label class="e-form-label">Listino:</label>
-                                        <SfDropDownList TValue="string" TItem="TestataListino" Placeholder="Seleziona Listino" DataSource="ArrayListiini" @bind-Value="SelectedRK.IDListino">
-                                            <DropDownListFieldSettings Value="IDListino" Text="Descrizione"></DropDownListFieldSettings>
+                                        <label class="e-form-label">Zona:</label>
+                                        <SfDropDownList TValue="string" TItem="Zona" Placeholder="Seleziona Zona" DataSource="ArrayZone" @bind-Value="SelectedRK.IDZona">
+                                            <DropDownListFieldSettings Value="IDZona" Text="Descrizione"></DropDownListFieldSettings>
                                         </SfDropDownList>
                                     </Template>
-                                </FormItem>                              
+                                </FormItem>
+                                <FormItem Field="@nameof(Cliente.IDPagamento)" ColumnSpan="6">
+                                    <Template>
+                                        <label class="e-form-label">Pagamento:</label>
+                                        <SfDropDownList TValue="string" TItem="CondizionePagamento" Placeholder="Seleziona Pagamento" DataSource="ArrayPagamenti" @bind-Value="SelectedRK.IDPagamento">
+                                            <DropDownListFieldSettings Value="IDPagamento" Text="Descrizione"></DropDownListFieldSettings>
+                                        </SfDropDownList>
+                                    </Template>
+                                </FormItem>     
+
+
+
+                           
 
                             </FormItems>
+
+
                             <FormButtons>
                                 <SfButton>Registra</SfButton>
                             </FormButtons>
                         </SfDataForm>
                     </ContentTemplate>
                 </TabItem>
+
+                <TabItem>
+                    <ChildContent>
+                        <TabHeader Text="Indirizzi Spedizione"></TabHeader>
+                    </ChildContent>
+                    <ContentTemplate>
+                    </ContentTemplate>
+                </TabItem>
+
+                <TabItem>
+                    <ChildContent>
+                        <TabHeader Text="Contatti"></TabHeader>
+                    </ChildContent>
+                    <ContentTemplate>
+                    </ContentTemplate>
+                </TabItem>
+
+                 <TabItem>
+                    <ChildContent>
+                        <TabHeader Text="Documenti"></TabHeader>
+                    </ChildContent>
+                    <ContentTemplate>
+                    </ContentTemplate>
+                </TabItem>               
+
             </TabItems>
+
         </SfTab>
     </div>
 </div>
