@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/giuliano.bernardi/VSCode/myWebApp/myWebApp.Shared/myWebApp.Shared.csproj": {}
+    "/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp.Shared/myWebApp.Shared.csproj": {}
   },
   "projects": {
-    "/Users/giuliano.bernardi/VSCode/myWebApp/myWebApp.Shared/myWebApp.Shared.csproj": {
+    "/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp.Shared/myWebApp.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/giuliano.bernardi/VSCode/myWebApp/myWebApp.Shared/myWebApp.Shared.csproj",
+        "projectUniqueName": "/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp.Shared/myWebApp.Shared.csproj",
         "projectName": "myWebApp.Shared",
-        "projectPath": "/Users/giuliano.bernardi/VSCode/myWebApp/myWebApp.Shared/myWebApp.Shared.csproj",
+        "projectPath": "/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp.Shared/myWebApp.Shared.csproj",
         "packagesPath": "/Users/giuliano.bernardi/.nuget/packages/",
-        "outputPath": "/Users/giuliano.bernardi/VSCode/myWebApp/myWebApp.Shared/obj/",
+        "outputPath": "/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp.Shared/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/giuliano.bernardi/.nuget/NuGet/NuGet.Config"

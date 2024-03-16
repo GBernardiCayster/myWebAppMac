@@ -3718,11 +3718,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/giuliano.bernardi/VSCode/myWebApp/myWebApp.Client/myWebApp.Client.csproj",
+      "projectUniqueName": "/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp.Client/myWebApp.Client.csproj",
       "projectName": "myWebApp.Client",
-      "projectPath": "/Users/giuliano.bernardi/VSCode/myWebApp/myWebApp.Client/myWebApp.Client.csproj",
+      "projectPath": "/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp.Client/myWebApp.Client.csproj",
       "packagesPath": "/Users/giuliano.bernardi/.nuget/packages/",
-      "outputPath": "/Users/giuliano.bernardi/VSCode/myWebApp/myWebApp.Client/obj/",
+      "outputPath": "/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp.Client/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/giuliano.bernardi/.nuget/NuGet/NuGet.Config"
@@ -3738,8 +3738,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/Users/giuliano.bernardi/VSCode/myWebApp/myWebApp.Shared/myWebApp.Shared.csproj": {
-              "projectPath": "/Users/giuliano.bernardi/VSCode/myWebApp/myWebApp.Shared/myWebApp.Shared.csproj"
+            "/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp.Shared/myWebApp.Shared.csproj": {
+              "projectPath": "/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp.Shared/myWebApp.Shared.csproj"
             }
           }
         }

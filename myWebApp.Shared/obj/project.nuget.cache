@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "EXbxTry21VxWcigpJacMIx2pMk6plNjkjC5mMOI7W5YDzApRwHFnVY6KezNv3FvfhZFJT0FkWwM49Grx6628ww==",
+  "dgSpecHash": "C6R9h44pcLEA5mhyTjFhUfcPCZyy/9pTCX0kvECw3awxzdQ4MslcZRKD+RXohnDyaZztoimVVrU6gdhwMcSiew==",
   "success": true,
-  "projectFilePath": "/Users/giuliano.bernardi/VSCode/myWebApp/myWebApp.Shared/myWebApp.Shared.csproj",
+  "projectFilePath": "/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp.Shared/myWebApp.Shared.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

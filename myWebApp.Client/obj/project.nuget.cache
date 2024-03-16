@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "rkq9M2LI3H2sVY0MKze/IVsUfkWNePHhIYp+RKlAjS3Wv06zLlheXDbPDiUtj6Icn2rR5Y7hwyoGjgMs89xPFg==",
+  "dgSpecHash": "jT1/LQO+ovAxpPWguSt3msOO9uRCaoIlkyQiKy1xTGk/f6xZ2Pr8WQ+9XKS7JA2V1zLhbpC5aFE+TpR6pdHKsQ==",
   "success": true,
-  "projectFilePath": "/Users/giuliano.bernardi/VSCode/myWebApp/myWebApp.Client/myWebApp.Client.csproj",
+  "projectFilePath": "/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp.Client/myWebApp.Client.csproj",
   "expectedPackageFiles": [
     "/Users/giuliano.bernardi/.nuget/packages/blazored.fluentvalidation/2.1.0/blazored.fluentvalidation.2.1.0.nupkg.sha512",
     "/Users/giuliano.bernardi/.nuget/packages/blazored.sessionstorage/2.4.0/blazored.sessionstorage.2.4.0.nupkg.sha512",

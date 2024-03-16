@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "/b5V7fe0HpFWKcdWsRrDyjzqB1620/mRWudF+1EJqQCDnzjEcEN6Sm7vpFDt0AsjQeBV1gtMvivTdPFbJmRGQw==",
+  "dgSpecHash": "JNpyk3F8hR5vnH9wr7A9Ay0kkIgEEiUuXJRQL0ilbTANeVxXI8uBTjTp52KMRNP3VYbgiBYvv1kCA+UbO4aczQ==",
   "success": true,
-  "projectFilePath": "/Users/giuliano.bernardi/VSCode/myWebApp/myWebApp/myWebApp.csproj",
+  "projectFilePath": "/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp/myWebApp.csproj",
   "expectedPackageFiles": [
     "/Users/giuliano.bernardi/.nuget/packages/azure.core/1.25.0/azure.core.1.25.0.nupkg.sha512",
     "/Users/giuliano.bernardi/.nuget/packages/azure.identity/1.7.0/azure.identity.1.7.0.nupkg.sha512",
