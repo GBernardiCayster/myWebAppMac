@@ -57,8 +57,6 @@ namespace myWebApp {
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NAaF1cXmhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnxTdEFjW31WcXBXRWJVVU11Ww==");
 
 
-            builder.Services.AddCascadingAuthenticationState();
-
             builder.Services.AddAuthentication(o =>
             {
                 o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -105,6 +103,8 @@ namespace myWebApp {
 
             app.UseStaticFiles();
             app.UseAntiforgery();
+
+
 
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode()
