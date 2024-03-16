@@ -1,0 +1,12 @@
+/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp.Shared/bin/Debug/net8.0/myWebApp.Shared.deps.json
+/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp.Shared/bin/Debug/net8.0/myWebApp.Shared.dll
+/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp.Shared/bin/Debug/net8.0/myWebApp.Shared.pdb
+/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp.Shared/obj/Debug/net8.0/myWebApp.Shared.GeneratedMSBuildEditorConfig.editorconfig
+/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp.Shared/obj/Debug/net8.0/myWebApp.Shared.AssemblyInfoInputs.cache
+/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp.Shared/obj/Debug/net8.0/myWebApp.Shared.AssemblyInfo.cs
+/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp.Shared/obj/Debug/net8.0/myWebApp.Shared.csproj.CoreCompileInputs.cache
+/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp.Shared/obj/Debug/net8.0/myWebApp.Shared.sourcelink.json
+/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp.Shared/obj/Debug/net8.0/myWebApp.Shared.dll
+/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp.Shared/obj/Debug/net8.0/refint/myWebApp.Shared.dll
+/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp.Shared/obj/Debug/net8.0/myWebApp.Shared.pdb
+/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp.Shared/obj/Debug/net8.0/ref/myWebApp.Shared.dll

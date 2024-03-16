@@ -1,0 +1,49 @@
+{
+  "Files": [
+    {
+      "Id": "/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp/obj/Debug/net8.0/scopedcss/projectbundle/myWebApp.bundle.scp.css",
+      "PackagePath": "staticwebassets/myWebApp.bundle.scp.css"
+    },
+    {
+      "Id": "/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp/wwwroot/Resources/Agenti.rdl",
+      "PackagePath": "staticwebassets/Resources/Agenti.rdl"
+    },
+    {
+      "Id": "/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp/wwwroot/Resources/Clienti.rdl",
+      "PackagePath": "staticwebassets/Resources/Clienti.rdl"
+    },
+    {
+      "Id": "/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp/wwwroot/app.css",
+      "PackagePath": "staticwebassets/app.css"
+    },
+    {
+      "Id": "/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp/wwwroot/bootstrap/bootstrap.min.css",
+      "PackagePath": "staticwebassets/bootstrap/bootstrap.min.css"
+    },
+    {
+      "Id": "/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp/wwwroot/bootstrap/bootstrap.min.css.map",
+      "PackagePath": "staticwebassets/bootstrap/bootstrap.min.css.map"
+    },
+    {
+      "Id": "/Users/giuliano.bernardi/VSCode/myWebAppMac/myWebApp/wwwroot/favicon.png",
+      "PackagePath": "staticwebassets/favicon.png"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.myWebApp.props",
+      "PackagePath": "build\\myWebApp.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.myWebApp.props",
+      "PackagePath": "buildMultiTargeting\\myWebApp.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.myWebApp.props",
+      "PackagePath": "buildTransitive\\myWebApp.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.myWebApp.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

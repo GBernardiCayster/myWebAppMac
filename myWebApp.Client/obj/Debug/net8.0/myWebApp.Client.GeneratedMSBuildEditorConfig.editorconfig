@@ -1,0 +1,67 @@
+is_global = true
+build_property.EnableAotAnalyzer = 
+build_property.EnableSingleFileAnalyzer = 
+build_property.EnableTrimAnalyzer = false
+build_property.IncludeAllContentForSelfExtract = 
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = false
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = browser
+build_property.RootNamespace = myWebApp.Client
+build_property.RootNamespace = myWebApp.Client
+build_property.ProjectDir = /Users/giuliano.bernardi/VSCode/myWebApp/myWebApp.Client/
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = false
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = /Users/giuliano.bernardi/VSCode/myWebApp/myWebApp.Client
+build_property._RazorSourceGeneratorDebug = 
+
+[/Users/giuliano.bernardi/VSCode/myWebApp/myWebApp.Client/Pages/Anagrafiche/Agenti/AddEditAgente.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQW5hZ3JhZmljaGUvQWdlbnRpL0FkZEVkaXRBZ2VudGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/giuliano.bernardi/VSCode/myWebApp/myWebApp.Client/Pages/Anagrafiche/Agenti/Agenti.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQW5hZ3JhZmljaGUvQWdlbnRpL0FnZW50aS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/giuliano.bernardi/VSCode/myWebApp/myWebApp.Client/Pages/Anagrafiche/Clienti/AddEditCliente.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQW5hZ3JhZmljaGUvQ2xpZW50aS9BZGRFZGl0Q2xpZW50ZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/giuliano.bernardi/VSCode/myWebApp/myWebApp.Client/Pages/Anagrafiche/Clienti/Clienti.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQW5hZ3JhZmljaGUvQ2xpZW50aS9DbGllbnRpLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/giuliano.bernardi/VSCode/myWebApp/myWebApp.Client/Pages/Anagrafiche/ContiCC/AddEditContoCC.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQW5hZ3JhZmljaGUvQ29udGlDQy9BZGRFZGl0Q29udG9DQy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/giuliano.bernardi/VSCode/myWebApp/myWebApp.Client/Pages/Anagrafiche/ContiCC/ContiCC.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQW5hZ3JhZmljaGUvQ29udGlDQy9Db250aUNDLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/giuliano.bernardi/VSCode/myWebApp/myWebApp.Client/Pages/Login.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvTG9naW4ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/giuliano.bernardi/VSCode/myWebApp/myWebApp.Client/Pages/Reserved.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUmVzZXJ2ZWQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/giuliano.bernardi/VSCode/myWebApp/myWebApp.Client/Pages/Tabelle/AddEditZona.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvVGFiZWxsZS9BZGRFZGl0Wm9uYS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/giuliano.bernardi/VSCode/myWebApp/myWebApp.Client/Pages/Tabelle/Zone.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvVGFiZWxsZS9ab25lLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/giuliano.bernardi/VSCode/myWebApp/myWebApp.Client/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
