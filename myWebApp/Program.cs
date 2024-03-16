@@ -101,8 +101,9 @@ namespace myWebApp {
 
             app.UseHttpsRedirection();
 
-            app.UseStaticFiles();
             app.UseAntiforgery();
+            app.UseStaticFiles();
+  
 
 
 
